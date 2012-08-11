@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Strapdown - Beautifully simple Markdown documentation</title>
+
+  <link href="assets/themes/united.min.css" rel="stylesheet">
+  <link href="assets/strapdown.css" rel="stylesheet">
+  <script src="assets/strapdown.js"></script>
+</head>
+
+<body>
+<pre style="display:none;">
+
+# Strapdown
+
+This is something else
+
+```coffeescript
+class Animal
+  constructor: (@name) ->
+  move: (meters, loc) ->
+    alert @name + " moved " + meters + "m."
+  travel: (path...) ->
+    for place in path
+      @move place.distance, place.location
+
+```
+
+And this too
+
+## Features
+
++ Content is search-engine friendly
++ Easily skinnable: Choose from several provided themes
+
+
+</pre>
+</body>
+</html>

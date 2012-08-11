@@ -1,0 +1,13 @@
+{
+  "author": "Artur Adib",
+  "name": "strapdown",
+  "version": "0.0.0",
+  "dependencies": {
+    "shelljs": "0.0.6"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
