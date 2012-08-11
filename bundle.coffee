@@ -8,7 +8,6 @@ if not test '-d', buildDir
 
 # JS
 bundle = ''
-bundle += (cat 'vendor/jquery.min.js') + '\n'
 bundle += (cat 'vendor/showdown.min.js') + '\n'
 bundle += (cat 'vendor/prettify.min.js') + '\n'
 bundle += (cat 'src/strapdown.js') + '\n'

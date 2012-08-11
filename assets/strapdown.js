@@ -193,26 +193,29 @@ prettyPrintingJob={langExtension:langExtension,sourceNode:cs,numberLines:lineNum
 if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone();}}
 doWork();}
 var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':registerLangHandler,'sourceDecorator':sourceDecorator,'PR_ATTRIB_NAME':PR_ATTRIB_NAME,'PR_ATTRIB_VALUE':PR_ATTRIB_VALUE,'PR_COMMENT':PR_COMMENT,'PR_DECLARATION':PR_DECLARATION,'PR_KEYWORD':PR_KEYWORD,'PR_LITERAL':PR_LITERAL,'PR_NOCODE':PR_NOCODE,'PR_PLAIN':PR_PLAIN,'PR_PUNCTUATION':PR_PUNCTUATION,'PR_SOURCE':PR_SOURCE,'PR_STRING':PR_STRING,'PR_TAG':PR_TAG,'PR_TYPE':PR_TYPE,'prettyPrintOne':win['prettyPrintOne']=prettyPrintOne,'prettyPrint':win['prettyPrint']=prettyPrint};if(typeof define==="function"&&define['amd']){define("google-code-prettify",[],function(){return PR;});}})();
-$(function() {
-  // Prepare HTML body
-  $('<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div class="brand"> </div> </div> </div> </div>')
-    .appendTo('body');
-  $('.brand').text($('title').text());
-  $('<div id="content" class="container">').appendTo('body');
+// Save text
+var markdownEl = document.getElementById('markdown');
+var markdown = markdownEl.textContent || markdownEl.innerText;
 
-  // Generate Markdown
-  var converter = new Showdown.converter();
-  var text = $('body > pre').text();
-  var html = converter.makeHtml(text);
-  $('#content').html( html );
+// Prepare HTML body
+document.body.innerHTML = '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>   <div id="content" class="container" />';
 
-  // Prettify
-  $('#content code').each(function() {
-    var $this = $(this);
-    var lang = this.className;
-    $this.addClass('prettyprint');
-    $this.addClass('lang-' + lang);
-  });
-  prettyPrint();
-});
+var titleEl = document.getElementsByTagName('title')[0];
+var title = titleEl.textContent || titleEl.innerText;
+
+document.getElementById('headline').innerHTML = title;
+
+// Generate Markdown
+var converter = new Showdown.converter();
+var html = converter.makeHtml(markdown);
+document.getElementById('content').innerHTML = html;
+
+// Prettify
+var codeEls = document.getElementsByTagName('code');
+for (var i=0, ii=codeEls.length; i<ii; i++) {
+  var codeEl = codeEls[i];
+  var lang = codeEl.className;
+  codeEl.className = 'prettyprint lang-' + lang;
+}
+prettyPrint();
 
