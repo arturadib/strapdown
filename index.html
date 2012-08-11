@@ -2,17 +2,32 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Strapdown - Beautifully simple Markdown documentation</title> <!-- Change title -->
-  <link href="assets/themes/united.min.css" rel="stylesheet"> <!-- Choose theme -->
+  
+  <!--====================================================================
+    Step 1: Change the title 
+  ====================================================================== -->
+  <title>Strapdown - Beautifully simple Markdown documentation</title>
+  
+  <!--====================================================================
+    Step 2: Choose the theme
+  ====================================================================== -->
+  <link href="assets/themes/united.min.css" rel="stylesheet">
+  
   <link href="assets/strapdown.css" rel="stylesheet">
 </head>
 <body>
 
-<!-- Write your markdown inside the <pre> element below -->
-<pre id="markdown" style="display:none;">
+<!--====================================================================
+  Step 3: Write your Markdown
+====================================================================== -->
+<textarea id="markdown" style="display:none;">
 # Strapdown
 
 This is something else
+
+```html
+ <script>alert('hi')</script>
+```
 
 ```coffeescript
 class Animal
@@ -31,8 +46,8 @@ And this too
 
 + Content is search-engine friendly
 + Easily skinnable: Choose from several provided themes
-</pre>
 
+</textarea>
 <script src="assets/strapdown.js"></script>
 </body>
 </html>

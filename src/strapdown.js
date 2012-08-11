@@ -6,7 +6,7 @@ var markdown = markdownEl.textContent || markdownEl.innerText;
 document.body.innerHTML = '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>   <div id="content" class="container" />';
 
 var titleEl = document.getElementsByTagName('title')[0];
-var title = titleEl.textContent || titleEl.innerText;
+var title = titleEl.innerHTML;
 
 document.getElementById('headline').innerHTML = title;
 
