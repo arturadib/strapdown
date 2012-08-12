@@ -288,11 +288,18 @@ var markdown = markdownEl.textContent || markdownEl.innerText;
 var titleEl = document.getElementsByTagName('title')[0];
 var title = titleEl.innerHTML;
 
-// Replace HTML #markdown element with output container, etc
+// Insert navbar if there's none
 var newNode = document.createElement('div');
-newNode.innerHTML = '<div id="content" class="container" />';
-if (document.getElementsByClassName('navbar').length === 0)
-  newNode.innerHTML += '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>';
+newNode.className = 'navbar navbar-fixed-top';
+if (document.getElementsByClassName('navbar').length === 0) {
+  newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
+  document.body.insertBefore(newNode, document.body.firstChild);
+}
+
+// Replace markdown element with HTML container
+newNode = document.createElement('div');
+newNode.className = 'container';
+newNode.id = 'content';
 document.body.replaceChild(newNode, markdownEl);
 
 var headlineEl = document.getElementById('headline');

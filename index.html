@@ -2,16 +2,21 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Strapdown.js - Instant Markdown documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strapdown.js - Instant documentation with Markdown and Bootstrap</title>
+
 <link href="v/0.1/themes/united.min.css" rel="stylesheet">  
 <link href="v/0.1/strapdown.css" rel="stylesheet">
+<link href="v/0.1/themes/bootstrap-responsive.min.css" rel="stylesheet">
+
 </head>
 <body>
+<!-- I'm using <textarea> here but you should use <xmp>, as explained in the docs -->
 <textarea id="markdown">
 
 # Strapdown.js
 
-Strapdown.js lets you instantly create Bootstrap-themed Markdown documents that are rendered directly in the browser. Use it to document your projects, create tutorials, home pages, etc. (This very page was written with Strapdown).
+Strapdown.js lets you instantly create [Bootstrap](http://twitter.github.com/bootstrap/)-themed Markdown documents that are rendered directly in the browser. Use it to document your projects, create tutorials, home pages, etc. (This very page was written with Strapdown).
 
 ### Features
 
@@ -29,6 +34,7 @@ Simply copy and paste the HTML code below and modify the three indicated steps -
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Step 1: Change the title -->
 <title>Hello Strapdown</title>
@@ -37,6 +43,7 @@ Simply copy and paste the HTML code below and modify the three indicated steps -
 <link href="http://strapdownjs.com/v/0.1/themes/united.min.css" rel="stylesheet">
 
 <link href="http://strapdownjs.com/v/0.1/strapdown.css" rel="stylesheet">
+<link href="http://strapdownjs.com/v/0.1/themes/bootstrap-responsive.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -57,15 +64,21 @@ culpa qui officia deserunt mollit anim id est laborum.
 
 ### Themes
 
-Themes from [Bootswatch.com](http://bootswatch.com) are included in `assets/` for your convenience. Simply replace the appropriate CSS `<link>` to point to one of the included themes:
+Themes from [Bootswatch.com](http://bootswatch.com) are included for your convenience. Simply replace the appropriate CSS `<link>` to point to one of the included themes:
   
 ![Bootswatch](bootswatch.png)
 
-### Caveats
+### Limitations
 
-Because Strapdown uses an `<xmp>` element to wrap your Markdown (to avoid having to escape special HTML characters), your Markdown can't contain the closing tag `</xmp>`. That's the only tag that needs to be avoided.
+Because Strapdown uses an `<xmp>` element to wrap your Markdown (to avoid having to escape special HTML characters), your text can't contain the string `</xmp>`. That's the only string that needs to be avoided.
 
-<hr/> <div style="float:left; margin-bottom:40px;"><img style="margin:8px; margin-right:10px;" src="https://twimg0-a.akamaihd.net/profile_images/1389031556/Artur_Adib-164x164_normal.png"/></div> <div style="background:rgb(235,235,245); padding:10px; height:45px;">By Artur Adib. I'm a software engineer at Mozilla.<br/>I tweet about coding and startups: <a target="_blank" href="http://twitter.com/arturadib">@arturadib</a> </div>
+### Credits
+
++ [Bootswatch](http://bootswatch.com) - Beautiful Bootstrap themes
++ [Marked](https://github.com/chjj/marked/) - Fast Markdown parser in JavaScript
++ [Google Code Prettify](http://code.google.com/p/google-code-prettify/) - Syntax highlighting in JavaScript
+
+<hr/> <div style="float:left; margin-bottom:40px;"><img style="margin:8px; margin-right:10px;" src="https://twimg0-a.akamaihd.net/profile_images/1389031556/Artur_Adib-164x164_normal.png"/></div> <div style="background:rgb(235,235,245); padding:10px; height:45px;">Copyright (c) 2012 Artur Adib<br/>I'm a software engineer at Mozilla. I tweet about coding and startups: <a target="_blank" href="http://twitter.com/arturadib">@arturadib</a> </div>
 
 </textarea>
 <script src="v/0.1/strapdown.js"></script>

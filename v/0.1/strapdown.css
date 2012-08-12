@@ -60,17 +60,21 @@ li.L7,
 li.L9 { background: #eee }
 
 
+
 /*******************************************************************
 
 This chunk is to fix Bootstrap so that Markdown looks good
 
 *******************************************************************/
 
-
 body {
-  margin-top: 60px;
-  margin-bottom: 30px;
+  padding-top: 60px;
+  margin-bottom: 15px;
   font-size: 15px;
+}
+
+#markdown {
+  display: none;
 }
 
 h1,h2,h3,h4 {
@@ -81,10 +85,6 @@ h1,h2,h3,h4 {
 pre {
   margin-top: 20px;
   margin-bottom: 20px;
-}
-
-#markdown {
-  display: none;
 }
 
 img {
