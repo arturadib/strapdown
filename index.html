@@ -1,51 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  
-  <!--====================================================================
-    Step 1: Change the title 
-  ====================================================================== -->
-  <title>Strapdown - Beautifully simple Markdown documentation</title>
-  
-  <!--====================================================================
-    Step 2: Choose the theme
-  ====================================================================== -->
-  <link href="assets/themes/united.min.css" rel="stylesheet">
-  
-  <link href="assets/strapdown.css" rel="stylesheet">
+<meta charset="utf-8">
+<title>Strapdown - Hassle-free Markdown documentation</title>
+<link href="assets/themes/united.min.css" rel="stylesheet">  
+<link href="assets/strapdown.css" rel="stylesheet">
 </head>
 <body>
 
-<!--====================================================================
-  Step 3: Write your Markdown
-====================================================================== -->
-<textarea id="markdown" style="display:none;">
+<textarea id="markdown">
 # Strapdown
 
-This is something else
+Strapdown lets you instantly create Bootstrap-themed Markdown documents that are rendered directly in the browser - no server-side compilation necessary. Use it to document your projects, create tutorials, home pages, etc. (This very page was written with Strapdown).
+
+### Using it
+
+Simply copy and paste the HTML code below and modify the three indicated steps - can't get any easier than this:
 
 ```html
- <script>alert('hi')</script>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<!-- Step 1: Change title -->
+<title>Hello Strapdown</title>
+
+<!-- Step 2: Choose a theme -->
+<link href="assets/themes/united.min.css" rel="stylesheet">
+
+<link href="assets/strapdown.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Step 3: Write your Markdown! -->
+<xmp id="markdown">
+# Hello, from Strapdown
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum.
+
+</xmp>
+<script src="assets/strapdown.js"></script>
+</body>
 ```
 
-```coffeescript
-class Animal
-  constructor: (@name) ->
-  move: (meters, loc) ->
-    alert @name + " moved " + meters + "m."
-  travel: (path...) ->
-    for place in path
-      @move place.distance, place.location
+### Themes
 
-```
+Themes from [Bootswatch.com](http://bootswatch.com) are included in `assets/` for your convenience. Simply replace the appropriate CSS `<link>` to point to one of the included themes:
+  
+![Bootswatch](bootswatch.png)
 
-And this too
+### Features
 
-## Features
++ Search-engine friendly
++ Zero installs
++ Github-style syntax highlighting
++ Themeable
 
-+ Content is search-engine friendly
-+ Easily skinnable: Choose from several provided themes
+### Caveats
+
+Because Strapdown uses an `<xmp>` element to wrap your Markdown, your Markdown can't contain the closing tag `</xmp>`. That's the only tag that needs to be avoided.
 
 </textarea>
 <script src="assets/strapdown.js"></script>

@@ -69,6 +69,7 @@ This chunk is to fix Bootstrap so that Markdown looks good
 
 body {
   margin-top: 60px;
+  margin-bottom: 30px;
   font-size: 15px;
 }
 
@@ -82,3 +83,11 @@ pre {
   margin-bottom: 20px;
 }
 
+#markdown {
+  display: none;
+}
+
+img {
+  margin-top:10px;
+  margin-bottom:10px;
+}

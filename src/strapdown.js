@@ -10,9 +10,8 @@ var title = titleEl.innerHTML;
 
 document.getElementById('headline').innerHTML = title;
 
-// Generate Markdown
-var converter = new Showdown.converter();
-var html = converter.makeHtml(markdown);
+// // Generate Markdown
+var html = marked(markdown);
 document.getElementById('content').innerHTML = html;
 
 // Prettify
