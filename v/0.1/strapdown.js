@@ -282,17 +282,22 @@ prettyPrintingJob={langExtension:langExtension,sourceNode:cs,numberLines:lineNum
 if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone();}}
 doWork();}
 var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':registerLangHandler,'sourceDecorator':sourceDecorator,'PR_ATTRIB_NAME':PR_ATTRIB_NAME,'PR_ATTRIB_VALUE':PR_ATTRIB_VALUE,'PR_COMMENT':PR_COMMENT,'PR_DECLARATION':PR_DECLARATION,'PR_KEYWORD':PR_KEYWORD,'PR_LITERAL':PR_LITERAL,'PR_NOCODE':PR_NOCODE,'PR_PLAIN':PR_PLAIN,'PR_PUNCTUATION':PR_PUNCTUATION,'PR_SOURCE':PR_SOURCE,'PR_STRING':PR_STRING,'PR_TAG':PR_TAG,'PR_TYPE':PR_TYPE,'prettyPrintOne':win['prettyPrintOne']=prettyPrintOne,'prettyPrint':win['prettyPrint']=prettyPrint};if(typeof define==="function"&&define['amd']){define("google-code-prettify",[],function(){return PR;});}})();
-// Save text
+// Save markdown text, title, etc
 var markdownEl = document.getElementById('markdown');
 var markdown = markdownEl.textContent || markdownEl.innerText;
-
-// Prepare HTML body
-document.body.innerHTML = '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>   <div id="content" class="container" />';
-
 var titleEl = document.getElementsByTagName('title')[0];
 var title = titleEl.innerHTML;
 
-document.getElementById('headline').innerHTML = title;
+// Replace HTML #markdown element with output container, etc
+var newNode = document.createElement('div');
+newNode.innerHTML = '<div id="content" class="container" />';
+if (document.getElementsByClassName('navbar').length === 0)
+  newNode.innerHTML += '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>';
+document.body.replaceChild(newNode, markdownEl);
+
+var headlineEl = document.getElementById('headline');
+if (headlineEl)
+  headlineEl.innerHTML = title;
 
 // // Generate Markdown
 var html = marked(markdown);

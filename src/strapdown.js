@@ -1,14 +1,19 @@
-// Save text
+// Save markdown text, title, etc
 var markdownEl = document.getElementById('markdown');
 var markdown = markdownEl.textContent || markdownEl.innerText;
-
-// Prepare HTML body
-document.body.innerHTML = '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>   <div id="content" class="container" />';
-
 var titleEl = document.getElementsByTagName('title')[0];
 var title = titleEl.innerHTML;
 
-document.getElementById('headline').innerHTML = title;
+// Replace HTML #markdown element with output container, etc
+var newNode = document.createElement('div');
+newNode.innerHTML = '<div id="content" class="container" />';
+if (document.getElementsByClassName('navbar').length === 0)
+  newNode.innerHTML += '<div class="navbar navbar-fixed-top"> <div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div> </div>';
+document.body.replaceChild(newNode, markdownEl);
+
+var headlineEl = document.getElementById('headline');
+if (headlineEl)
+  headlineEl.innerHTML = title;
 
 // // Generate Markdown
 var html = marked(markdown);

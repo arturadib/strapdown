@@ -2,20 +2,27 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Strapdown - Hassle-free Markdown documentation</title>
-<link href="assets/themes/united.min.css" rel="stylesheet">  
-<link href="assets/strapdown.css" rel="stylesheet">
+<title>Strapdown.js - Instant Markdown documentation</title>
+<link href="v/0.1/themes/united.min.css" rel="stylesheet">  
+<link href="v/0.1/strapdown.css" rel="stylesheet">
 </head>
 <body>
-
 <textarea id="markdown">
-# Strapdown
 
-Strapdown lets you instantly create Bootstrap-themed Markdown documents that are rendered directly in the browser - no server-side compilation necessary. Use it to document your projects, create tutorials, home pages, etc. (This very page was written with Strapdown).
+# Strapdown.js
+
+Strapdown.js lets you instantly create Bootstrap-themed Markdown documents that are rendered directly in the browser. Use it to document your projects, create tutorials, home pages, etc. (This very page was written with Strapdown).
+
+### Features
+
++ Search-engine friendly
++ Zero configuration
++ Github-style syntax highlighting
++ Themeable
 
 ### Using it
 
-Simply copy and paste the HTML code below and modify the three indicated steps - can't get any easier than this:
+Simply copy and paste the HTML code below and modify the three indicated steps - nothing to install, nothing to compile. Everything is handled by the CSS and JavaScript included:
 
 ```html
 <!DOCTYPE html>
@@ -23,17 +30,17 @@ Simply copy and paste the HTML code below and modify the three indicated steps -
 <head>
 <meta charset="utf-8">
 
-<!-- Step 1: Change title -->
+<!-- Step 1: Change the title -->
 <title>Hello Strapdown</title>
 
 <!-- Step 2: Choose a theme -->
-<link href="assets/themes/united.min.css" rel="stylesheet">
+<link href="http://strapdownjs.com/v/0.1/themes/united.min.css" rel="stylesheet">
 
-<link href="assets/strapdown.css" rel="stylesheet">
+<link href="http://strapdownjs.com/v/0.1/strapdown.css" rel="stylesheet">
 </head>
 <body>
 
-<!-- Step 3: Write your Markdown! -->
+<!-- Step 3: Write your Markdown between the <xmp> </xmp> tags -->
 <xmp id="markdown">
 # Hello, from Strapdown
 
@@ -42,10 +49,10 @@ et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam
 aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
 culpa qui officia deserunt mollit anim id est laborum.
-
 </xmp>
-<script src="assets/strapdown.js"></script>
+<script src="http://strapdownjs.com/v/0.1/strapdown.js"></script>
 </body>
+</html>
 ```
 
 ### Themes
@@ -54,18 +61,13 @@ Themes from [Bootswatch.com](http://bootswatch.com) are included in `assets/` fo
   
 ![Bootswatch](bootswatch.png)
 
-### Features
-
-+ Search-engine friendly
-+ Zero installs
-+ Github-style syntax highlighting
-+ Themeable
-
 ### Caveats
 
-Because Strapdown uses an `<xmp>` element to wrap your Markdown, your Markdown can't contain the closing tag `</xmp>`. That's the only tag that needs to be avoided.
+Because Strapdown uses an `<xmp>` element to wrap your Markdown (to avoid having to escape special HTML characters), your Markdown can't contain the closing tag `</xmp>`. That's the only tag that needs to be avoided.
+
+<hr/> <div style="float:left; margin-bottom:40px;"><img style="margin:8px; margin-right:10px;" src="https://twimg0-a.akamaihd.net/profile_images/1389031556/Artur_Adib-164x164_normal.png"/></div> <div style="background:rgb(235,235,245); padding:10px; height:45px;">By Artur Adib. I'm a software engineer at Mozilla.<br/>I tweet about coding and startups: <a target="_blank" href="http://twitter.com/arturadib">@arturadib</a> </div>
 
 </textarea>
-<script src="assets/strapdown.js"></script>
+<script src="v/0.1/strapdown.js"></script>
 </body>
 </html>
