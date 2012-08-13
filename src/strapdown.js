@@ -1,3 +1,6 @@
+// Shim for IE < 9
+document.head = document.getElementsByTagName('head')[0];
+
 // Get origin of script
 var scriptEls = document.getElementsByTagName('script');
 var origin = '';
@@ -8,9 +11,6 @@ for (var i = 0; i < scriptEls.length; i++) {
 }
 var originBase = origin.substr(0, origin.lastIndexOf('/'));
 
-// Shim for IE < 9
-document.head = document.getElementsByTagName('head')[0];
-
 // Use viewport so that Bootstrap is actually responsive on mobile Safari
 var metaEl = document.createElement('meta');
 metaEl.name = 'viewport';
@@ -20,9 +20,13 @@ if (document.head.firstChild)
 else
   document.head.appendChild(metaEl);
 
+// Get theme
+var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
+var theme = markdownEl.getAttribute('theme') || 'bootstrap';
+
 // Stylesheets
 var linkEl = document.createElement('link');
-linkEl.href = originBase + '/themes/united.min.css';
+linkEl.href = originBase + '/themes/'+theme+'.min.css';
 linkEl.rel = 'stylesheet';
 document.head.appendChild(linkEl);
 
@@ -37,7 +41,6 @@ linkEl.rel = 'stylesheet';
 document.head.appendChild(linkEl);
 
 // Save markdown text, title, etc
-var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
 var markdown = markdownEl.textContent || markdownEl.innerText;
 var titleEl = document.getElementsByTagName('title')[0];
 var title = titleEl.innerHTML;

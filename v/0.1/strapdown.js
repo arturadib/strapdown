@@ -282,6 +282,9 @@ prettyPrintingJob={langExtension:langExtension,sourceNode:cs,numberLines:lineNum
 if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone();}}
 doWork();}
 var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':registerLangHandler,'sourceDecorator':sourceDecorator,'PR_ATTRIB_NAME':PR_ATTRIB_NAME,'PR_ATTRIB_VALUE':PR_ATTRIB_VALUE,'PR_COMMENT':PR_COMMENT,'PR_DECLARATION':PR_DECLARATION,'PR_KEYWORD':PR_KEYWORD,'PR_LITERAL':PR_LITERAL,'PR_NOCODE':PR_NOCODE,'PR_PLAIN':PR_PLAIN,'PR_PUNCTUATION':PR_PUNCTUATION,'PR_SOURCE':PR_SOURCE,'PR_STRING':PR_STRING,'PR_TAG':PR_TAG,'PR_TYPE':PR_TYPE,'prettyPrintOne':win['prettyPrintOne']=prettyPrintOne,'prettyPrint':win['prettyPrint']=prettyPrint};if(typeof define==="function"&&define['amd']){define("google-code-prettify",[],function(){return PR;});}})();
+// Shim for IE < 9
+document.head = document.getElementsByTagName('head')[0];
+
 // Get origin of script
 var scriptEls = document.getElementsByTagName('script');
 var origin = '';
@@ -292,9 +295,6 @@ for (var i = 0; i < scriptEls.length; i++) {
 }
 var originBase = origin.substr(0, origin.lastIndexOf('/'));
 
-// Shim for IE < 9
-document.head = document.getElementsByTagName('head')[0];
-
 // Use viewport so that Bootstrap is actually responsive on mobile Safari
 var metaEl = document.createElement('meta');
 metaEl.name = 'viewport';
@@ -304,9 +304,13 @@ if (document.head.firstChild)
 else
   document.head.appendChild(metaEl);
 
+// Get theme
+var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
+var theme = markdownEl.getAttribute('theme') || 'bootstrap';
+
 // Stylesheets
 var linkEl = document.createElement('link');
-linkEl.href = originBase + '/themes/united.min.css';
+linkEl.href = originBase + '/themes/'+theme+'.min.css';
 linkEl.rel = 'stylesheet';
 document.head.appendChild(linkEl);
 
@@ -321,7 +325,6 @@ linkEl.rel = 'stylesheet';
 document.head.appendChild(linkEl);
 
 // Save markdown text, title, etc
-var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
 var markdown = markdownEl.textContent || markdownEl.innerText;
 var titleEl = document.getElementsByTagName('title')[0];
 var title = titleEl.innerHTML;

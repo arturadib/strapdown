@@ -12,7 +12,7 @@ JavaScript:
 
 <html>
 <title>Strapdown.js - Instant Markdown pages</title>
-<textarea>
+<textarea theme="united">
 # Strapdown.js
 
 Strapdown.js makes it embarrassingly simple to create elegant Markdown documents. Simply copy the HTML code below and modify the title and the Markdown text - no server-side compiler/interpreter or fiddling with CSS/templates required. Use it to quickly document your projects, create tutorials, home pages, etc. This page was written with Strapdown.
@@ -20,7 +20,7 @@ Strapdown.js makes it embarrassingly simple to create elegant Markdown documents
 ```html
 <html>
 <title>Hello Strapdown</title>
-<xmp>
+<xmp theme="united">
 # Markdown text goes in here
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
@@ -42,7 +42,7 @@ culpa qui officia deserunt mollit anim id est laborum.
 
 ### Themes
 
-Themes from [Bootswatch.com](http://bootswatch.com) are included for your convenience. Simply replace the appropriate CSS `<link>` to point to one of the included themes:
+Themes from [Bootswatch.com](http://bootswatch.com) are included for your convenience. Simply include the attribute `theme` in your `<xmp>` tag with one of the following theme names (default is vanilla Bootstrap):
   
 ![Bootswatch](bootswatch.png)
 
@@ -52,7 +52,7 @@ Because Strapdown uses either `<xmp>` or `<textarea>` to wrap your Markdown (to 
 
 ### Credits
 
-Credit should be given to the projects below that make up most of Strapdown.js:
+All credits go to the projects below that make up most of Strapdown.js:
 
 + [Marked](https://github.com/chjj/marked/) - Fast Markdown parser in JavaScript
 + [Google Code Prettify](http://code.google.com/p/google-code-prettify/) - Syntax highlighting in JavaScript
