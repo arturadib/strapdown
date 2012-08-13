@@ -3,27 +3,24 @@
 <!--
 
 JavaScript:
-  Use right version
   Parse theme
   Document the above
+  IE 8
 
 -->
 
 
 <html>
-<title>Strapdown.js - Instant HTML documents via Markdown and Bootstrap</title>
+<title>Strapdown.js - Instant Markdown pages</title>
 <!-- I'm using <textarea> here but you should use <xmp>, as explained in the docs -->
 <textarea id="markdown">
 # Strapdown.js
 
-Strapdown.js lets you instantly create elegant HTML documents written in Markdown - no server-side compilation required. Use it to quickly document your projects, create tutorials, home pages, etc. (For example, this page was written with Strapdown).
-
-It's as simple as modifying the example HTML below and loading it in your browser - Strapdown.js takes care of Markdown compilation, styling, cross-browser artifacts, etc:
+Strapdown.js makes it embarrassingly simple to create elegant Markdown documents. Simply copy the HTML code below and modify the title and the Markdown text. Use it to quickly document your projects, create tutorials, home pages, etc. This page was written with Strapdown.
 
 ```html
 <html>
 <title>Hello Strapdown</title>
-<!-- Write your Markdown between the <xmp> </xmp> tags -->
 <xmp id="markdown">
 # Markdown text goes in here
 
@@ -43,7 +40,7 @@ culpa qui officia deserunt mollit anim id est laborum.
 + Zero configuration
 + Github-style syntax highlighting
 + Themeable
-+ Cross-browser (tested with mobile Safari, IE 9, Firefox, Chrome)
++ Cross-browser (tested with mobile Safari, IE 8/9, Firefox, Chrome)
 
 ### Themes
 
@@ -64,8 +61,15 @@ Credit should be given to the projects below that make up most of Strapdown.js:
 + [Twitter Bootstrap](http://twitter.github.com/bootstrap/) - Beautiful, responsive CSS framework
 + [Bootswatch](http://bootswatch.com) - Additional Bootstrap themes
 
-<hr/> <div style="float:left; margin-bottom:40px;"><img style="margin:8px; margin-right:10px;" src="https://twimg0-a.akamaihd.net/profile_images/1389031556/Artur_Adib-164x164_normal.png"/></div> <div style="background:rgb(235,235,245); padding:10px; height:45px;">Copyright (c) 2012 Artur Adib<br/>I'm a software engineer at Mozilla. I tweet about coding and startups: <a target="_blank" href="http://twitter.com/arturadib">@arturadib</a> </div>
-
+<hr/>
+<div style="background:rgb(235,235,245); min-height:64px; padding:0 5px;">
+  <div style="float:left;">
+    <img style="margin:8px; margin-right:10px;" src="https://twimg0-a.akamaihd.net/profile_images/1389031556/Artur_Adib-164x164_normal.png"/>
+  </div>
+  <div style="padding-top:10px; padding-bottom:10px;">
+    Copyright (c) 2012 Artur Adib<br/>I'm a software engineer at Mozilla. I tweet about coding and startups: <a target="_blank" href="http://twitter.com/arturadib">@arturadib</a>
+  </div>
+</div>
 </textarea>
 <script src="v/0.1/strapdown.js"></script>
 </html>
