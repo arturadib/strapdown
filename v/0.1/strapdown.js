@@ -363,7 +363,7 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
   if (headlineEl)
     headlineEl.innerHTML = title;
 
-  // // Generate Markdown
+  // Generate Markdown
   var html = marked(markdown);
   document.getElementById('content').innerHTML = html;
 

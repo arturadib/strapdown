@@ -1,3 +1,38 @@
+
+/*******************************************************************
+
+This chunk is to fix Bootstrap so that the Markdown output looks good
+
+*******************************************************************/
+
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+  font-size: 15px;
+  line-height: 150%;
+}
+
+xmp, textarea {
+  display: none;
+}
+
+h1,h2,h3,h4 {
+  margin: 15px 0;
+}
+
+pre {
+  margin: 20px 0;
+}
+
+img {
+  margin: 10px 0;
+}
+
+.navbar {
+  z-index: 1;
+}
+
+
 /*******************************************************************
 
 This chunk is for Google's Code Prettify:
@@ -59,33 +94,3 @@ li.L5,
 li.L7,
 li.L9 { background: #eee }
 
-
-
-/*******************************************************************
-
-This chunk is to fix Bootstrap so that Markdown looks good
-
-*******************************************************************/
-
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
-  font-size: 15px;
-  line-height: 150%;
-}
-
-xmp, textarea {
-  display: none;
-}
-
-h1,h2,h3,h4 {
-  margin: 15px 0;
-}
-
-pre {
-  margin: 20px 0;
-}
-
-img {
-  margin: 10px 0;
-}
