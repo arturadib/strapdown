@@ -321,7 +321,7 @@ linkEl.rel = 'stylesheet';
 document.head.appendChild(linkEl);
 
 // Save markdown text, title, etc
-var markdownEl = document.getElementById('markdown');
+var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
 var markdown = markdownEl.textContent || markdownEl.innerText;
 var titleEl = document.getElementsByTagName('title')[0];
 var title = titleEl.innerHTML;
