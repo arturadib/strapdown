@@ -1,21 +1,11 @@
-
-
-<!--
-
-JavaScript:
-  Parse theme
-  Document the above
-  IE 8
-
--->
-
-
 <html>
 <title>Strapdown.js - Instant Markdown pages</title>
 <textarea theme="united">
 # Strapdown.js
 
-Strapdown.js makes it embarrassingly simple to create elegant Markdown documents. Simply copy the HTML code below and modify the title and the Markdown text - no server-side compiler/interpreter or fiddling with CSS/templates required. Use it to quickly document your projects, create tutorials, home pages, etc. This page was written with Strapdown.
+Strapdown.js makes it embarrassingly simple to create elegant Markdown documents without having to compile the text on the server. **Simply copy the HTML code below and modify the title and the Markdown text** (and optionally the theme). For example, the page you are reading was written by entering Markdown text in this snippet.
+
+Use it to quickly document your projects, create tutorials, home pages, etc.
 
 ```html
 <html>
@@ -48,11 +38,11 @@ Themes from [Bootswatch.com](http://bootswatch.com) are included for your conven
 
 ### Limitations
 
-Because Strapdown uses either `<xmp>` or `<textarea>` to wrap your Markdown (to avoid having to escape special HTML characters), your text can't contain the respective closing tag (e.g. `</xmp>`).
+It's an unlikely scenario, but since Strapdown uses the `<xmp>` tag to wrap your Markdown (so that users don't have to escape special HTML characters), your text can't contain the string `</xmp>`.
 
 ### Credits
 
-All credits go to the projects below that make up most of Strapdown.js:
+All credit goes to the projects below that make up most of Strapdown.js:
 
 + [Marked](https://github.com/chjj/marked/) - Fast Markdown parser in JavaScript
 + [Google Code Prettify](http://code.google.com/p/google-code-prettify/) - Syntax highlighting in JavaScript

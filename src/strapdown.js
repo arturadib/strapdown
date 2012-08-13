@@ -1,5 +1,19 @@
-// Shim for IE < 9
+// Shims for IE < 9
 document.head = document.getElementsByTagName('head')[0];
+
+if (!('getElementsByClassName' in document)) {
+  document.getElementsByClassName = function(name) {
+    function getElementsByClassName(node, classname) {
+      var a = [];
+      var re = new RegExp('(^| )'+classname+'( |$)');
+      var els = node.getElementsByTagName("*");
+      for(var i=0,j=els.length; i<j; i++)
+          if(re.test(els[i].className))a.push(els[i]);
+      return a;
+    }
+    return getElementsByClassName(document.body, name); 
+  }
+}
 
 // Get origin of script
 var scriptEls = document.getElementsByTagName('script');
@@ -23,6 +37,7 @@ else
 // Get theme
 var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
 var theme = markdownEl.getAttribute('theme') || 'bootstrap';
+theme = theme.toLowerCase();
 
 // Stylesheets
 var linkEl = document.createElement('link');
