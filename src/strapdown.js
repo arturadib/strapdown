@@ -1,3 +1,41 @@
+// Get origin of script
+var scriptEls = document.getElementsByTagName('script');
+var origin = '';
+for (var i = 0; i < scriptEls.length; i++) {
+  if (scriptEls[i].src.match('strapdown')) {
+    origin = scriptEls[i].src;
+  }
+}
+var originBase = origin.substr(0, origin.lastIndexOf('/'));
+
+// Shim for IE < 9
+document.head = document.getElementsByTagName('head')[0];
+
+// Use viewport so that Bootstrap is actually responsive on mobile Safari
+var metaEl = document.createElement('meta');
+metaEl.name = 'viewport';
+metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+if (document.head.firstChild)
+  document.head.insertBefore(metaEl, document.head.firstChild);
+else
+  document.head.appendChild(metaEl);
+
+// Stylesheets
+var linkEl = document.createElement('link');
+linkEl.href = originBase + '/themes/united.min.css';
+linkEl.rel = 'stylesheet';
+document.head.appendChild(linkEl);
+
+var linkEl = document.createElement('link');
+linkEl.href = originBase + '/strapdown.css';
+linkEl.rel = 'stylesheet';
+document.head.appendChild(linkEl);
+
+var linkEl = document.createElement('link');
+linkEl.href = originBase + '/themes/bootstrap-responsive.min.css';
+linkEl.rel = 'stylesheet';
+document.head.appendChild(linkEl);
+
 // Save markdown text, title, etc
 var markdownEl = document.getElementById('markdown');
 var markdown = markdownEl.textContent || markdownEl.innerText;

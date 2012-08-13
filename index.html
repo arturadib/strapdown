@@ -1,55 +1,31 @@
-<!DOCTYPE html>
+
+
+<!--
+
+JavaScript:
+  Use right version
+  Parse theme
+  Document the above
+
+-->
+
+
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strapdown.js - Instant documentation with Markdown and Bootstrap</title>
-
-<link href="v/0.1/themes/united.min.css" rel="stylesheet">  
-<link href="v/0.1/strapdown.css" rel="stylesheet">
-<link href="v/0.1/themes/bootstrap-responsive.min.css" rel="stylesheet">
-
-</head>
-<body>
+<title>Strapdown.js - Instant HTML documents via Markdown and Bootstrap</title>
 <!-- I'm using <textarea> here but you should use <xmp>, as explained in the docs -->
 <textarea id="markdown">
-
 # Strapdown.js
 
-Strapdown.js lets you instantly create [Bootstrap](http://twitter.github.com/bootstrap/)-themed Markdown documents that are rendered directly in the browser. Use it to document your projects, create tutorials, home pages, etc. (This very page was written with Strapdown).
+Strapdown.js lets you instantly create elegant HTML documents written in Markdown - no server-side compilation required. Use it to quickly document your projects, create tutorials, home pages, etc. (For example, this page was written with Strapdown).
 
-### Features
-
-+ Search-engine friendly
-+ Zero configuration
-+ Github-style syntax highlighting
-+ Themeable
-
-### Using it
-
-Simply copy and paste the HTML code below and modify the three indicated steps - nothing to install, nothing to compile. Everything is handled by the CSS and JavaScript included:
+It's as simple as modifying the example HTML below and loading it in your browser - Strapdown.js takes care of Markdown compilation, styling, cross-browser artifacts, etc:
 
 ```html
-<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Step 1: Change the title -->
 <title>Hello Strapdown</title>
-
-<!-- Step 2: Choose a theme -->
-<link href="http://strapdownjs.com/v/0.1/themes/united.min.css" rel="stylesheet">
-
-<link href="http://strapdownjs.com/v/0.1/strapdown.css" rel="stylesheet">
-<link href="http://strapdownjs.com/v/0.1/themes/bootstrap-responsive.min.css" rel="stylesheet">
-</head>
-<body>
-
-<!-- Step 3: Write your Markdown between the <xmp> </xmp> tags -->
+<!-- Write your Markdown between the <xmp> </xmp> tags -->
 <xmp id="markdown">
-# Hello, from Strapdown
+# Markdown text goes in here
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
 et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -58,9 +34,16 @@ cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non pr
 culpa qui officia deserunt mollit anim id est laborum.
 </xmp>
 <script src="http://strapdownjs.com/v/0.1/strapdown.js"></script>
-</body>
 </html>
 ```
+
+### Features
+
++ Search-engine friendly
++ Zero configuration
++ Github-style syntax highlighting
++ Themeable
++ Cross-browser (tested with mobile Safari, IE 9, Firefox, Chrome)
 
 ### Themes
 
@@ -74,13 +57,15 @@ Because Strapdown uses an `<xmp>` element to wrap your Markdown (to avoid having
 
 ### Credits
 
-+ [Bootswatch](http://bootswatch.com) - Beautiful Bootstrap themes
+Credit should be given to the projects below that make up most of Strapdown.js:
+
 + [Marked](https://github.com/chjj/marked/) - Fast Markdown parser in JavaScript
 + [Google Code Prettify](http://code.google.com/p/google-code-prettify/) - Syntax highlighting in JavaScript
++ [Twitter Bootstrap](http://twitter.github.com/bootstrap/) - Beautiful, responsive CSS framework
++ [Bootswatch](http://bootswatch.com) - Additional Bootstrap themes
 
 <hr/> <div style="float:left; margin-bottom:40px;"><img style="margin:8px; margin-right:10px;" src="https://twimg0-a.akamaihd.net/profile_images/1389031556/Artur_Adib-164x164_normal.png"/></div> <div style="background:rgb(235,235,245); padding:10px; height:45px;">Copyright (c) 2012 Artur Adib<br/>I'm a software engineer at Mozilla. I tweet about coding and startups: <a target="_blank" href="http://twitter.com/arturadib">@arturadib</a> </div>
 
 </textarea>
 <script src="v/0.1/strapdown.js"></script>
-</body>
 </html>
