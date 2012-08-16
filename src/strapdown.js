@@ -1,5 +1,10 @@
 ;(function(window, document) {
+
+  //////////////////////////////////////////////////////////////////////
+  //
   // Shims for IE < 9
+  //
+
   document.head = document.getElementsByTagName('head')[0];
 
   if (!('getElementsByClassName' in document)) {
@@ -16,6 +21,20 @@
     }
   }
 
+  //////////////////////////////////////////////////////////////////////
+  //
+  // <head> stuff
+  //
+
+  // Use <meta> viewport so that Bootstrap is actually responsive on mobile
+  var metaEl = document.createElement('meta');
+  metaEl.name = 'viewport';
+  metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+  if (document.head.firstChild)
+    document.head.insertBefore(metaEl, document.head.firstChild);
+  else
+    document.head.appendChild(metaEl);
+
   // Get origin of script
   var scriptEls = document.getElementsByTagName('script');
   var origin = '';
@@ -26,17 +45,7 @@
   }
   var originBase = origin.substr(0, origin.lastIndexOf('/'));
 
-  // Use viewport so that Bootstrap is actually responsive on mobile Safari
-  var metaEl = document.createElement('meta');
-  metaEl.name = 'viewport';
-  metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
-  if (document.head.firstChild)
-    document.head.insertBefore(metaEl, document.head.firstChild);
-  else
-    document.head.appendChild(metaEl);
-
   // Get theme
-  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
   theme = theme.toLowerCase();
 
@@ -56,10 +65,18 @@
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
-  // Save markdown text, title, etc
-  var markdown = markdownEl.textContent || markdownEl.innerText;
-  var titleEl = document.getElementsByTagName('title')[0];
-  var title = titleEl.innerHTML;
+  //////////////////////////////////////////////////////////////////////
+  //
+  // <body> stuff
+  //
+
+  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0],
+      markdown = markdownEl.textContent || markdownEl.innerText;
+
+  var newNode = document.createElement('div');
+  newNode.className = 'container';
+  newNode.id = 'content';
+  document.body.replaceChild(newNode, markdownEl);
 
   // Insert navbar if there's none
   var newNode = document.createElement('div');
@@ -69,15 +86,17 @@
     document.body.insertBefore(newNode, document.body.firstChild);
   }
 
-  // Replace markdown element with HTML container
-  newNode = document.createElement('div');
-  newNode.className = 'container';
-  newNode.id = 'content';
-  document.body.replaceChild(newNode, markdownEl);
+  var titleEl = document.getElementsByTagName('title')[0],
+      title = titleEl.innerHTML;
 
   var headlineEl = document.getElementById('headline');
   if (headlineEl)
     headlineEl.innerHTML = title;
+
+  //////////////////////////////////////////////////////////////////////
+  //
+  // Markdown!
+  //
 
   // Generate Markdown
   var html = marked(markdown);
@@ -91,4 +110,5 @@
     codeEl.className = 'prettyprint lang-' + lang;
   }
   prettyPrint();
+
 })(window, document);
