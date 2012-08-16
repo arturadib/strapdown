@@ -283,7 +283,15 @@ if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone
 doWork();}
 var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':registerLangHandler,'sourceDecorator':sourceDecorator,'PR_ATTRIB_NAME':PR_ATTRIB_NAME,'PR_ATTRIB_VALUE':PR_ATTRIB_VALUE,'PR_COMMENT':PR_COMMENT,'PR_DECLARATION':PR_DECLARATION,'PR_KEYWORD':PR_KEYWORD,'PR_LITERAL':PR_LITERAL,'PR_NOCODE':PR_NOCODE,'PR_PLAIN':PR_PLAIN,'PR_PUNCTUATION':PR_PUNCTUATION,'PR_SOURCE':PR_SOURCE,'PR_STRING':PR_STRING,'PR_TAG':PR_TAG,'PR_TYPE':PR_TYPE,'prettyPrintOne':win['prettyPrintOne']=prettyPrintOne,'prettyPrint':win['prettyPrint']=prettyPrint};if(typeof define==="function"&&define['amd']){define("google-code-prettify",[],function(){return PR;});}})();
 ;(function(window, document) {
+
+  // Hide body until we're done fiddling with the DOM
+  document.body.style.display = 'none';
+
+  //////////////////////////////////////////////////////////////////////
+  //
   // Shims for IE < 9
+  //
+
   document.head = document.getElementsByTagName('head')[0];
 
   if (!('getElementsByClassName' in document)) {
@@ -300,17 +308,22 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
     }
   }
 
-  // Get origin of script
-  var scriptEls = document.getElementsByTagName('script');
-  var origin = '';
-  for (var i = 0; i < scriptEls.length; i++) {
-    if (scriptEls[i].src.match('strapdown')) {
-      origin = scriptEls[i].src;
-    }
-  }
-  var originBase = origin.substr(0, origin.lastIndexOf('/'));
+  //////////////////////////////////////////////////////////////////////
+  //
+  // Get user elements we need
+  //
 
-  // Use viewport so that Bootstrap is actually responsive on mobile Safari
+  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0],
+      titleEl = document.getElementsByTagName('title')[0],
+      scriptEls = document.getElementsByTagName('script'),
+      navbarEl = document.getElementsByClassName('navbar')[0];
+
+  //////////////////////////////////////////////////////////////////////
+  //
+  // <head> stuff
+  //
+
+  // Use <meta> viewport so that Bootstrap is actually responsive on mobile
   var metaEl = document.createElement('meta');
   metaEl.name = 'viewport';
   metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
@@ -319,8 +332,16 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
   else
     document.head.appendChild(metaEl);
 
+  // Get origin of script
+  var origin = '';
+  for (var i = 0; i < scriptEls.length; i++) {
+    if (scriptEls[i].src.match('strapdown')) {
+      origin = scriptEls[i].src;
+    }
+  }
+  var originBase = origin.substr(0, origin.lastIndexOf('/'));
+
   // Get theme
-  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
   theme = theme.toLowerCase();
 
@@ -340,28 +361,34 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
-  // Save markdown text, title, etc
+  //////////////////////////////////////////////////////////////////////
+  //
+  // <body> stuff
+  //
+
   var markdown = markdownEl.textContent || markdownEl.innerText;
-  var titleEl = document.getElementsByTagName('title')[0];
-  var title = titleEl.innerHTML;
 
-  // Insert navbar if there's none
   var newNode = document.createElement('div');
-  newNode.className = 'navbar navbar-fixed-top';
-  if (document.getElementsByClassName('navbar').length === 0) {
-    newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
-    document.body.insertBefore(newNode, document.body.firstChild);
-  }
-
-  // Replace markdown element with HTML container
-  newNode = document.createElement('div');
   newNode.className = 'container';
   newNode.id = 'content';
   document.body.replaceChild(newNode, markdownEl);
 
-  var headlineEl = document.getElementById('headline');
-  if (headlineEl)
-    headlineEl.innerHTML = title;
+  // Insert navbar if there's none
+  var newNode = document.createElement('div');
+  newNode.className = 'navbar navbar-fixed-top';
+  if (!navbarEl) {
+    newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
+    document.body.insertBefore(newNode, document.body.firstChild);
+    var title = titleEl.innerHTML;
+    var headlineEl = document.getElementById('headline');
+    if (headlineEl)
+      headlineEl.innerHTML = title;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  //
+  // Markdown!
+  //
 
   // Generate Markdown
   var html = marked(markdown);
@@ -375,5 +402,9 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
     codeEl.className = 'prettyprint lang-' + lang;
   }
   prettyPrint();
+
+  // All done - show body
+  document.body.style.display = '';
+
 })(window, document);
 

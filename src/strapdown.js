@@ -1,5 +1,8 @@
 ;(function(window, document) {
 
+  // Hide body until we're done fiddling with the DOM
+  document.body.style.display = 'none';
+
   //////////////////////////////////////////////////////////////////////
   //
   // Shims for IE < 9
@@ -23,6 +26,16 @@
 
   //////////////////////////////////////////////////////////////////////
   //
+  // Get user elements we need
+  //
+
+  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0],
+      titleEl = document.getElementsByTagName('title')[0],
+      scriptEls = document.getElementsByTagName('script'),
+      navbarEl = document.getElementsByClassName('navbar')[0];
+
+  //////////////////////////////////////////////////////////////////////
+  //
   // <head> stuff
   //
 
@@ -36,7 +49,6 @@
     document.head.appendChild(metaEl);
 
   // Get origin of script
-  var scriptEls = document.getElementsByTagName('script');
   var origin = '';
   for (var i = 0; i < scriptEls.length; i++) {
     if (scriptEls[i].src.match('strapdown')) {
@@ -70,8 +82,7 @@
   // <body> stuff
   //
 
-  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0],
-      markdown = markdownEl.textContent || markdownEl.innerText;
+  var markdown = markdownEl.textContent || markdownEl.innerText;
 
   var newNode = document.createElement('div');
   newNode.className = 'container';
@@ -81,17 +92,14 @@
   // Insert navbar if there's none
   var newNode = document.createElement('div');
   newNode.className = 'navbar navbar-fixed-top';
-  if (document.getElementsByClassName('navbar').length === 0) {
+  if (!navbarEl) {
     newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
     document.body.insertBefore(newNode, document.body.firstChild);
+    var title = titleEl.innerHTML;
+    var headlineEl = document.getElementById('headline');
+    if (headlineEl)
+      headlineEl.innerHTML = title;
   }
-
-  var titleEl = document.getElementsByTagName('title')[0],
-      title = titleEl.innerHTML;
-
-  var headlineEl = document.getElementById('headline');
-  if (headlineEl)
-    headlineEl.innerHTML = title;
 
   //////////////////////////////////////////////////////////////////////
   //
@@ -110,5 +118,8 @@
     codeEl.className = 'prettyprint lang-' + lang;
   }
   prettyPrint();
+
+  // All done - show body
+  document.body.style.display = '';
 
 })(window, document);
