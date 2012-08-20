@@ -44,6 +44,7 @@ culpa qui officia deserunt mollit anim id est laborum.
 </html>
 ```
 
+
 ### Features
 
 + Search-engine friendly
@@ -51,15 +52,23 @@ culpa qui officia deserunt mollit anim id est laborum.
 + Github-style syntax highlighting
 + Themeable
 
+
 ### Themes
 
 Bootstrap themes from [Bootswatch.com](http://bootswatch.com) are included for your convenience. Simply include the attribute `theme` in your `<xmp>` tag with one of the following theme names (default is vanilla Bootstrap):
   
 ![Bootswatch](bootswatch.png)
 
+
+### Self-hosting
+
+For convenience the library is hosted at `strapdownjs.com` (as in the source above), but if you prefer to host it yourself make sure to save *all* files contained in `/v/<version_number>`, as the library dynamically loads all necessary stylesheets, etc.
+
+
 ### Limitations
 
 It's an unlikely scenario, but since Strapdown uses the `<xmp>` tag to wrap your Markdown (so that users don't have to escape special HTML characters), your text can't contain the string `</xmp>`.
+
 
 ### Credits
 
