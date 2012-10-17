@@ -1,6 +1,8 @@
 #!/usr/bin/env coffee
 require 'shelljs/global'
 
+cd __dirname
+
 ver = process.argv[2]
 if not ver
   echo 'You need to specify the version'
