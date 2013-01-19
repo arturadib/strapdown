@@ -20,7 +20,7 @@
             if(re.test(els[i].className))a.push(els[i]);
         return a;
       }
-      return getElementsByClassName(document.body, name); 
+      return getElementsByClassName(document.body, name);
     }
   }
 
@@ -118,6 +118,13 @@
     codeEl.className = 'prettyprint lang-' + lang;
   }
   prettyPrint();
+
+  // Style tables
+  var tableEls = document.getElementsByTagName('table');
+  for (var i=0, ii=tableEls.length; i<ii; i++) {
+    var tableEl = tableEls[i];
+    tableEl.className = 'table table-striped table-bordered';
+  }
 
   // All done - show body
   document.body.style.display = '';
