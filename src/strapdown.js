@@ -29,7 +29,11 @@
   // Get user elements we need
   //
 
-  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0],
+  var slice = Array.prototype.slice,
+      xmps = document.getElementsByTagName('xmp'),
+      textareas = document.getElementsByTagName('textarea'),
+      markdownEls = slice.call(xmps, 0).concat(slice.call(textareas, 0)),
+      markdownEl = markdownEls[0],
       titleEl = document.getElementsByTagName('title')[0],
       scriptEls = document.getElementsByTagName('script'),
       navbarEl = document.getElementsByClassName('navbar')[0];
@@ -77,38 +81,57 @@
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
-  //////////////////////////////////////////////////////////////////////
-  //
-  // <body> stuff
-  //
+  (function markdownAll(markdownEls) {
+    var navbarAdded = false;
 
-  var markdown = markdownEl.textContent || markdownEl.innerText;
+    function addNavbar(titleEl) {
+      var newNode = document.createElement('div');
+      newNode.className = 'navbar navbar-fixed-top';
+      newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
+      document.body.insertBefore(newNode, document.body.firstChild);
+      var title = titleEl.innerHTML;
+      var headlineEl = document.getElementById('headline');
+      if (headlineEl)
+        headlineEl.innerHTML = title;
+    }
 
-  var newNode = document.createElement('div');
-  newNode.className = 'container';
-  newNode.id = 'content';
-  document.body.replaceChild(newNode, markdownEl);
+    function markdownIt(markdownEl, i) {
+      //////////////////////////////////////////////////////////////////////
+      //
+      // <body> stuff
+      //
 
-  // Insert navbar if there's none
-  var newNode = document.createElement('div');
-  newNode.className = 'navbar navbar-fixed-top';
-  if (!navbarEl && titleEl) {
-    newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
-    document.body.insertBefore(newNode, document.body.firstChild);
-    var title = titleEl.innerHTML;
-    var headlineEl = document.getElementById('headline');
-    if (headlineEl)
-      headlineEl.innerHTML = title;
-  }
+      var markdown = markdownEl.textContent || markdownEl.innerText;
+      // Keep existing id if present
+      var id = markdownEl.id || ('content' + i);
 
-  //////////////////////////////////////////////////////////////////////
-  //
-  // Markdown!
-  //
+      var newNode = document.createElement('div');
+      newNode.className = 'container';
+      newNode.id = id;
+      document.body.replaceChild(newNode, markdownEl);
 
-  // Generate Markdown
-  var html = marked(markdown);
-  document.getElementById('content').innerHTML = html;
+      // Insert navbar if there's none
+      if (!navbarEl && titleEl && !navbarAdded) {
+        addNavbar(titleEl);
+        navbarAdded = true;
+      }
+
+      //////////////////////////////////////////////////////////////////////
+      //
+      // Markdown!
+      //
+
+      // Generate Markdown
+      var html = marked(markdown);
+      newNode.innerHTML = html;
+    }
+
+    for (var i = 0; i < markdownEls.length; i++) {
+      if (markdownEls[i].className.split(" ").indexOf("strapdown-ignore") < 0) {
+        markdownIt(markdownEls[i], i);
+      }
+    }
+  }(markdownEls));
 
   // Prettify
   var codeEls = document.getElementsByTagName('code');

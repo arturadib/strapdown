@@ -16,6 +16,10 @@ xmp, textarea {
   display: none;
 }
 
+xmp.strapdown-ignore, textarea.strapdown-ignore {
+  display: block;
+}
+
 h1,h2,h3,h4 {
   margin: 15px 0;
 }

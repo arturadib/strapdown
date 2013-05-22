@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Strapdown.js - Instant and elegant Markdown documents</title>
+  <meta name="description" content="Create Markdown documents using JavaScript and Bootstrap themes" />
+</script>
+</head>
+
+<body>
+
+<textarea theme="united" style="display:none;" id="preserve-me">
+## Markdown 1
+
+Check <strong>HTML</strong> <em>tags</em> <u>still</u> work.
+</textarea>
+
+<div>Regular content with a <textarea class="strapdown-ignore" cols="8" rows="1" style="display: inline-block;">textarea</textarea> we want Strapdown.js to ignore.</div>
+
+<xmp theme="united" style="display:none;">
+## Markdown 2
+
+````
+<textarea>Textarea as code sample.</textarea>
+````
+
+Check <strong>HTML</strong> <em>tags</em> <u>still</u> work.
+</xmp>
+
+<div>Regular content with an <xmp class="strapdown-ignore" style="display: inline-block;">xmp</xmp> we want Strapdown.js to ignore.</div>
+
+<textarea theme="united" style="display:none;">
+## Markdown 3
+
+Check <strong>HTML</strong> <em>tags</em> <u>still</u> work.
+</textarea>
+
+<script src="../v/0.3/strapdown.js"></script>
+
+</body>
+</html>
