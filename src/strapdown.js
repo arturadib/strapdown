@@ -24,19 +24,38 @@
     }
   }
 
+  var htmlCollectionToArray = (function () {
+    function toArr(coll) {
+      var arr = [],
+          i,
+          len = coll.length;
+      for (i = 0; i < len; i++) {
+        arr.push(coll[i]);
+      }
+      return arr;
+    }
+    return function (coll) {
+      try {
+        return Array.prototype.slice.call(coll, 0);
+      } catch (e) {
+        // E.g. IE8 fails using slice.
+        // http://stackoverflow.com/a/2735133/319878
+        return toArr(coll);
+      }
+    };
+  }());
+
   //////////////////////////////////////////////////////////////////////
   //
   // Get user elements we need
   //
-
-  var slice = Array.prototype.slice,
-      xmps = document.getElementsByTagName('xmp'),
+  var xmps = document.getElementsByTagName('xmp'),
       textareas = document.getElementsByTagName('textarea'),
-      markdownEls = slice.call(xmps, 0).concat(slice.call(textareas, 0)),
-      markdownEl = markdownEls[0],
+      markdownEl = xmps[0] || textareas[0],
       titleEl = document.getElementsByTagName('title')[0],
       scriptEls = document.getElementsByTagName('script'),
-      navbarEl = document.getElementsByClassName('navbar')[0];
+      navbarEl = document.getElementsByClassName('navbar')[0],
+      markdownEls = htmlCollectionToArray(xmps).concat(htmlCollectionToArray(textareas));
 
   //////////////////////////////////////////////////////////////////////
   //
