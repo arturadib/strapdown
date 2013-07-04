@@ -1,6 +1,34 @@
+
+function httpGet(theUrl){
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+function createMarkdownElFromScriptData(attributes){
+    if(!"data-src" in attributes){
+        return null;
+    }
+    var elm = document.createElement("xmp");
+    for(var i = 0; i < attributes.length; i++){
+        var attr = attributes[i];
+        if(attr.name.substr(0, 5) == "data-" && attr.name !== "data-src"){
+            elm.setAttribute(attr.name.substr(5), attr.value);
+        }
+    }
+    elm.innerHTML = httpGet(attributes["data-src"].value);
+    var body = document.getElementsByTagName("body")[0]
+    body.appendChild(elm);
+    return elm
+}
+
 ;(function(window, document) {
 
   // Hide body until we're done fiddling with the DOM
+
   document.body.style.display = 'none';
 
   //////////////////////////////////////////////////////////////////////
@@ -50,12 +78,18 @@
 
   // Get origin of script
   var origin = '';
+  var originEl = null;
   for (var i = 0; i < scriptEls.length; i++) {
     if (scriptEls[i].src.match('strapdown')) {
+      originEl = scriptEls[i];
       origin = scriptEls[i].src;
     }
   }
   var originBase = origin.substr(0, origin.lastIndexOf('/'));
+
+
+    if(!markdownEl)
+        markdownEl = createMarkdownElFromScriptData(originEl.attributes)
 
   // Get theme
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
