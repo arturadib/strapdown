@@ -12,7 +12,7 @@ You will need Node.js (>0.6.x) and CoffeeScript to generate the bundles. To bund
 
 ```
 $ npm install
-$ coffee bundle <version_number>
+$ coffee bundle.coffee <version_number>
 ```
 
 Bug fixes should go in the latest version - no need to bump it. New features or anything that changes the old behavior should go into a bumped version.
