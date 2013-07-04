@@ -1,11 +1,86 @@
 
-function httpGet(theUrl){
+function httpGet(url){
     var xmlHttp = null;
 
     xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.open( "GET", url, false );
     xmlHttp.send( null );
     return xmlHttp.responseText;
+}
+
+function getStrapdownScriptTag(document){
+    var scriptEls = document.getElementsByTagName('script');
+    for (var i = 0; i < scriptEls.length; i++) {
+        if (scriptEls[i].src.match('strapdown')) {
+          return scriptEls[i];
+        }
+    }
+}
+
+function getMarkdownEl(document){
+    var ret;
+    ret = document.getElementsByTagName('xmp')[0];
+    if(ret){
+        return ret;
+    }
+    ret = document.getElementsByTagName('textarea')[0];
+    if(ret){
+        return ret;
+    }
+    var scriptEl = getStrapdownScriptTag(document);
+    return createMarkdownElFromScriptData(scriptEl.attributes);
+}
+
+function createMetaTagInHeader(document){
+    var metaEl = document.createElement('meta');
+    metaEl.name = 'viewport';
+    metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+    if (document.head.firstChild){
+        document.head.insertBefore(metaEl, document.head.firstChild);
+    }
+    else{
+        document.head.appendChild(metaEl);
+    }
+}
+
+function getWantedTheme(document){
+    var markdownEl = getMarkdownEl(document);
+    var theme = markdownEl.getAttribute('theme') || 'bootstrap';
+    return theme.toLowerCase();
+}
+
+function createStyleSheet(document, href){
+    var linkEl = document.createElement('link');
+    linkEl.href = href
+    linkEl.rel = 'stylesheet';
+    document.head.appendChild(linkEl);
+}
+
+function createdNeededStyleSheets(document){
+    var path = '/themes/'+getWantedTheme(document) +'.min.css';
+    createStyleSheetWithRelativePath(document, path);
+    path = '/strapdown.css';
+    createStyleSheetWithRelativePath(document, path);
+    path = '/themes/bootstrap-responsive.min.css';
+    createStyleSheetWithRelativePath(document, path);
+}
+
+function createStyleSheetWithRelativePath(document, relativeHref){
+    var path = getPathRelativlyToStrapdownScript(document, relativeHref);
+    createStyleSheet(document, path);
+}
+
+function getPathOfTheStrapdownScript(document){
+    var script = getStrapdownScriptTag(document);
+    return script.src.substr(0, script.src.lastIndexOf('/'));
+}
+
+function getPathRelativlyToStrapdownScript(document, path){
+    var script = getPathOfTheStrapdownScript(document);
+    if(path.substr(0,1) === "/"){
+        return script + path;
+    }
+    return script + "/" + path;
 }
 
 function createMarkdownElFromScriptData(attributes){
@@ -25,142 +100,74 @@ function createMarkdownElFromScriptData(attributes){
     return elm
 }
 
-;(function(window, document) {
+function getTitle(document){
+    return document.getElementsByTagName('title')[0];
+}
 
-  // Hide body until we're done fiddling with the DOM
+function hasTitle(document){
+    return !!getTitle(document);
+}
 
-  document.body.style.display = 'none';
+function hasNavbar(document){
+    return !!document.getElementsByClassName('navbar')[0];
+}
 
-  //////////////////////////////////////////////////////////////////////
-  //
-  // Shims for IE < 9
-  //
-
-  document.head = document.getElementsByTagName('head')[0];
-
-  if (!('getElementsByClassName' in document)) {
-    document.getElementsByClassName = function(name) {
-      function getElementsByClassName(node, classname) {
-        var a = [];
-        var re = new RegExp('(^| )'+classname+'( |$)');
-        var els = node.getElementsByTagName("*");
-        for(var i=0,j=els.length; i<j; i++)
-            if(re.test(els[i].className))a.push(els[i]);
-        return a;
-      }
-      return getElementsByClassName(document.body, name);
+function createNavbarIfRequired(document){
+    var newNode = document.createElement('div');
+    newNode.className = 'navbar navbar-fixed-top';
+    if (!hasNavbar(document) && hasTitle(document)) {
+        newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
+        document.body.insertBefore(newNode, document.body.firstChild);
+        var title = getTitle(document).innerHTML;
+        var headlineEl = document.getElementById('headline');
+        if (headlineEl){
+            headlineEl.innerHTML = title;
+        }
     }
-  }
+}
 
-  //////////////////////////////////////////////////////////////////////
-  //
-  // Get user elements we need
-  //
-
-  var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0],
-      titleEl = document.getElementsByTagName('title')[0],
-      scriptEls = document.getElementsByTagName('script'),
-      navbarEl = document.getElementsByClassName('navbar')[0];
-
-  //////////////////////////////////////////////////////////////////////
-  //
-  // <head> stuff
-  //
-
-  // Use <meta> viewport so that Bootstrap is actually responsive on mobile
-  var metaEl = document.createElement('meta');
-  metaEl.name = 'viewport';
-  metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
-  if (document.head.firstChild)
-    document.head.insertBefore(metaEl, document.head.firstChild);
-  else
-    document.head.appendChild(metaEl);
-
-  // Get origin of script
-  var origin = '';
-  var originEl = null;
-  for (var i = 0; i < scriptEls.length; i++) {
-    if (scriptEls[i].src.match('strapdown')) {
-      originEl = scriptEls[i];
-      origin = scriptEls[i].src;
+function prettyfyEmbededCodeBlocks(document){
+    var codeEls = document.getElementsByTagName('code');
+    for (var i=0, ii=codeEls.length; i<ii; i++) {
+        var codeEl = codeEls[i];
+        var lang = codeEl.className;
+        codeEl.className = 'prettyprint lang-' + lang;
     }
-  }
-  var originBase = origin.substr(0, origin.lastIndexOf('/'));
+    prettyPrint();
+}
 
+function styleEmbededTables(document){
+    var tableEls = document.getElementsByTagName('table');
+    for (var i=0, ii=tableEls.length; i<ii; i++) {
+        var tableEl = tableEls[i];
+        tableEl.className = 'table table-striped table-bordered';
+    }
+}
 
-    if(!markdownEl)
-        markdownEl = createMarkdownElFromScriptData(originEl.attributes)
+function generateMarkdown(markdown, node){
+    var html = marked(markdown);
+    node.innerHTML = html;
+}
 
-  // Get theme
-  var theme = markdownEl.getAttribute('theme') || 'bootstrap';
-  theme = theme.toLowerCase();
+function createMarkdownHtmlFromMarkdownTag(document){
+    var markdownEl = getMarkdownEl(document);
+    var markdown = markdownEl.textContent || markdownEl.innerText;
 
-  // Stylesheets
-  var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/themes/'+theme+'.min.css';
-  linkEl.rel = 'stylesheet';
-  document.head.appendChild(linkEl);
+    var newNode = document.createElement('div');
+    newNode.className = 'container';
+    newNode.id = 'content';
+    document.body.replaceChild(newNode, markdownEl);
+    generateMarkdown(markdown, newNode);
+}
 
-  var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/strapdown.css';
-  linkEl.rel = 'stylesheet';
-  document.head.appendChild(linkEl);
-
-  var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/themes/bootstrap-responsive.min.css';
-  linkEl.rel = 'stylesheet';
-  document.head.appendChild(linkEl);
-
-  //////////////////////////////////////////////////////////////////////
-  //
-  // <body> stuff
-  //
-
-  var markdown = markdownEl.textContent || markdownEl.innerText;
-
-  var newNode = document.createElement('div');
-  newNode.className = 'container';
-  newNode.id = 'content';
-  document.body.replaceChild(newNode, markdownEl);
-
-  // Insert navbar if there's none
-  var newNode = document.createElement('div');
-  newNode.className = 'navbar navbar-fixed-top';
-  if (!navbarEl && titleEl) {
-    newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
-    document.body.insertBefore(newNode, document.body.firstChild);
-    var title = titleEl.innerHTML;
-    var headlineEl = document.getElementById('headline');
-    if (headlineEl)
-      headlineEl.innerHTML = title;
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  //
-  // Markdown!
-  //
-
-  // Generate Markdown
-  var html = marked(markdown);
-  document.getElementById('content').innerHTML = html;
-
-  // Prettify
-  var codeEls = document.getElementsByTagName('code');
-  for (var i=0, ii=codeEls.length; i<ii; i++) {
-    var codeEl = codeEls[i];
-    var lang = codeEl.className;
-    codeEl.className = 'prettyprint lang-' + lang;
-  }
-  prettyPrint();
-
-  // Style tables
-  var tableEls = document.getElementsByTagName('table');
-  for (var i=0, ii=tableEls.length; i<ii; i++) {
-    var tableEl = tableEls[i];
-    tableEl.className = 'table table-striped table-bordered';
-  }
-
-  // All done - show body
-  document.body.style.display = '';
+(function(window, document) {
+    document.body.style.display = 'none';
+    createMetaTagInHeader(document);
+    createdNeededStyleSheets(document);
+    createMarkdownHtmlFromMarkdownTag(document);
+    createNavbarIfRequired(document);
+    prettyfyEmbededCodeBlocks(document);
+    styleEmbededTables(document);
+    document.body.style.display = '';
 
 })(window, document);
