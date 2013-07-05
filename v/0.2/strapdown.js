@@ -307,9 +307,37 @@ prettyPrintingJob={langExtension:langExtension,sourceNode:cs,numberLines:lineNum
 if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone();}}
 doWork();}
 var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':registerLangHandler,'sourceDecorator':sourceDecorator,'PR_ATTRIB_NAME':PR_ATTRIB_NAME,'PR_ATTRIB_VALUE':PR_ATTRIB_VALUE,'PR_COMMENT':PR_COMMENT,'PR_DECLARATION':PR_DECLARATION,'PR_KEYWORD':PR_KEYWORD,'PR_LITERAL':PR_LITERAL,'PR_NOCODE':PR_NOCODE,'PR_PLAIN':PR_PLAIN,'PR_PUNCTUATION':PR_PUNCTUATION,'PR_SOURCE':PR_SOURCE,'PR_STRING':PR_STRING,'PR_TAG':PR_TAG,'PR_TYPE':PR_TYPE,'prettyPrintOne':win['prettyPrintOne']=prettyPrintOne,'prettyPrint':win['prettyPrint']=prettyPrint};if(typeof define==="function"&&define['amd']){define("google-code-prettify",[],function(){return PR;});}})();
+
+function httpGet(theUrl){
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+function createMarkdownElFromScriptData(attributes){
+    if(!"data-src" in attributes){
+        return null;
+    }
+    var elm = document.createElement("xmp");
+    for(var i = 0; i < attributes.length; i++){
+        var attr = attributes[i];
+        if(attr.name.substr(0, 5) == "data-" && attr.name !== "data-src"){
+            elm.setAttribute(attr.name.substr(5), attr.value);
+        }
+    }
+    elm.innerHTML = httpGet(attributes["data-src"].value);
+    var body = document.getElementsByTagName("body")[0]
+    body.appendChild(elm);
+    return elm
+}
+
 ;(function(window, document) {
 
   // Hide body until we're done fiddling with the DOM
+
   document.body.style.display = 'none';
 
   //////////////////////////////////////////////////////////////////////
@@ -359,12 +387,18 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
 
   // Get origin of script
   var origin = '';
+  var originEl = null;
   for (var i = 0; i < scriptEls.length; i++) {
     if (scriptEls[i].src.match('strapdown')) {
+      originEl = scriptEls[i];
       origin = scriptEls[i].src;
     }
   }
   var originBase = origin.substr(0, origin.lastIndexOf('/'));
+
+
+    if(!markdownEl)
+        markdownEl = createMarkdownElFromScriptData(originEl.attributes)
 
   // Get theme
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
