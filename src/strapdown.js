@@ -160,6 +160,54 @@ function createMarkdownHtmlFromMarkdownTag(document){
     generateMarkdown(markdown, newNode);
 }
 
+function removeElement(document, elm){
+    elm.parentNode.removeChild(elm);
+}
+
+function getFullPath(document, path){
+    if(path.substr(0,1) == "/"){
+        path = path.substr(1);
+    }
+    return document.location.href + path;
+}
+
+function getMarkdown(document, path){
+    var fullpath = getFullPath(document, path);
+    return httpGet(fullpath);
+}
+
+function removeOldPage(document){
+    $("xmp,.container,.navbar").each(function(){
+        removeElement(document, this);
+    }
+    );
+}
+
+function remakeInitialPage(document, markdown){
+    var xmp = document.createElement("xmp");
+    xmp.innerHTML = markdown;
+    xmp.setAttribute("style", "display:none;");
+    $("body").prepend(xmp)
+}
+
+function reloadPage(document){
+    createMarkdownHtmlFromMarkdownTag(document);
+    createNavbarIfRequired(document);
+    prettyfyEmbededCodeBlocks(document);
+    styleEmbededTables(document);
+}
+
+function loadMarkdownFromFilePath(path){
+    var markdown = getMarkdown(document, path);
+    if(markdown){
+        document.body.style.display = 'none';
+        removeOldPage(document);
+        remakeInitialPage(document, markdown)
+        reloadPage(document)
+        document.body.style.display = '';
+    }
+}
+
 (function(window, document) {
     document.body.style.display = 'none';
     createMetaTagInHeader(document);
