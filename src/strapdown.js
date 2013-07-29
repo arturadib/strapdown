@@ -61,9 +61,20 @@
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
   theme = theme.toLowerCase();
 
+  // Check remote flag
+  var remote = markdownEl.getAttribute('remote') || false;
+
   // Stylesheets
   var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/themes/'+theme+'.min.css';
+  if (remote) {
+    if (theme === 'bootstrap') {
+      linkEl.href = '//netdna.bootstrapcdn.com/twitter-bootstrap/latest/css/bootstrap.min.css';
+    } else {
+      linkEl.href = '//netdna.bootstrapcdn.com/bootswatch/latest/' + theme + '/bootstrap.min.css';
+    }
+  } else {
+    linkEl.href = originBase + '/themes/' + theme + '.min.css';
+  }
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
