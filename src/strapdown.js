@@ -1,8 +1,5 @@
 ;(function(window, document) {
 
-  // Hide body until we're done fiddling with the DOM
-  document.body.style.display = 'none';
-
   //////////////////////////////////////////////////////////////////////
   //
   // Shims for IE < 9
@@ -33,6 +30,14 @@
       titleEl = document.getElementsByTagName('title')[0],
       scriptEls = document.getElementsByTagName('script'),
       navbarEl = document.getElementsByClassName('navbar')[0];
+
+  if (!markdownEl) {
+    console.warn('No embedded Markdown found in this document for Strapdown.js to work on! Visit http://strapdownjs.com/ to learn more.');
+    return;
+  }
+
+  // Hide body until we're done fiddling with the DOM
+  document.body.style.display = 'none';
 
   //////////////////////////////////////////////////////////////////////
   //
