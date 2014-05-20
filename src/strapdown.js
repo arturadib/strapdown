@@ -61,6 +61,7 @@
     }
   }
   var originBase = origin.substr(0, origin.lastIndexOf('/'));
+  window.originBase = originBase;
 
   // Get theme
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
