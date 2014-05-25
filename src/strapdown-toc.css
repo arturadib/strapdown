@@ -1,0 +1,94 @@
+/** twbs's navbar */
+body {
+	padding-top: 60px;
+}
+
+
+/* Fix the issue with the navbar hiding the section's title when using links */
+h1[id], h2[id], h3[id] {
+	padding-top: 60px;
+	margin-top: -60px;
+	/*display: inline-block;  required for webkit browsers? */
+}
+
+
+/* Hides lower levels when the top level is not selected */
+.toc li.active>ul {
+	display: block;
+}
+.toc li>ul {
+	display: none;
+}
+
+
+/* Fix indent */
+.toc ul {
+	padding-left: 0px;
+	margin-left: 0px;
+	list-style: none outside none;
+}
+
+.toc>ul>li>a {
+	padding-top: 7px;
+	padding-bottom: 0px;
+}
+
+.toc li>a {
+	display: block;
+}
+
+.toc ul ul {
+	text-indent: 25px;
+}
+.toc ul ul ul {
+	text-indent: 40px;
+}
+
+
+/* Size specific styles */
+@media screen and (max-width: 767px) {
+	.navbar {
+		background-color: white;
+	}
+	.toc li.active {
+		font-weight: bold;
+		/*background-color: gray;*/
+	}
+
+	.navbar-inverse .navbar-nav li>a {
+		/* applying inverse style to all the links of the navbar */
+		color: #999;
+	}
+	.navbar-inverse .navbar-nav li>a:hover,
+	.navbar-inverse .navbar-nav li.active>a {
+		/* applying inverse style to all the links of the navbar */
+		color: #333;
+		text-decoration: none;
+	}
+
+}
+
+@media screen and (min-width: 768px) {
+	.toc {
+		position: absolute;
+		top: 60px;
+		width: 100%;
+		pointer-events:none;
+	}
+	.toc>li {
+		float: none;
+	}
+	.toc li>a {
+		padding-left: 10px;
+	}
+	.toc li.active>a {
+		font-weight: bold;
+		border-left: 2px solid;
+		margin-left: -2px;
+	}
+	.navbar-inverse .navbar-nav>li>a,
+	.navbar-inverse .navbar-nav>li>a:hover,
+	.navbar-inverse .navbar-nav>li.active>a {
+		color: #158CBA; /* Default link color (when not inverse) */
+	}
+}
