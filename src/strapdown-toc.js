@@ -28,7 +28,7 @@
     .attr('data-spy','scroll')
     .attr('data-target','.toc');
 
-  contentEl.addClass('col-sm-8 col-sm-offset-3');
+  contentEl.addClass('col-sm-10 col-sm-offset-2');
 
 
   function makeToc (content) {
