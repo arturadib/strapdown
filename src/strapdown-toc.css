@@ -75,6 +75,9 @@ h1[id], h2[id], h3[id] {
 		width: 100%;
 		pointer-events:none;
 	}
+	.toc>ul {
+		pointer-events:auto;
+	}
 	.toc>li {
 		float: none;
 	}
