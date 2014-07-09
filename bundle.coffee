@@ -24,15 +24,15 @@ bundle += (cat 'vendor/prettify.min.js') + '\n'
 bundle += (cat 'src/strapdown.js') + '\n'
 bundle.to outDir + '/strapdown.js'
 
-bundle2 = ''
-bundle2 += (cat 'vendor/jquery.min.js') + '\n'
-bundle2 += (cat 'vendor/jquery-ui.custom.min.js') + '\n'
-bundle2 += (cat 'vendor/jquery.tocify.min.js') + '\n'
-bundle2 += (cat 'src/strapdown-toc.js') + '\n'
-bundle2.to outDir + '/jquery.tocify.big.js'
+tocBundle = ''
+tocBundle += (cat 'vendor/jquery.min.js') + '\n'
+tocBundle += (cat 'vendor/bootstrap.custom.min.js') + '\n'
+tocBundle += (cat 'src/strapdown-toc.js') + '\n'
+tocBundle.to outDir + '/strapdown-toc.js'
 
 # CSS
 cp '-f', 'src/strapdown.css', outDir
+cp '-f', 'src/strapdown-toc.css', outDir
 mkdir '-p', outDir + '/themes'
 cp '-f', 'vendor/themes/*', outDir + '/themes'
 

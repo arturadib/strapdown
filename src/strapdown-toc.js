@@ -1,26 +1,118 @@
 ;(function($, window, document) {
-  if (!window.originBase) {
-    var scriptEls = document.getElementsByTagName('script');
-    var origin = '';
-    for (var i = 0; i < scriptEls.length; i++) {
-      if (scriptEls[i].src.match('jquery\\.tocify')) {
-        origin = scriptEls[i].src;
+  "use strict";
+
+  var contentEl    = $('#content'),
+      navbarEl     = $('#headline'),
+      pageTitle    = navbarEl.text(),
+      newNavbarEl  = $('' +
+        '<div class="navbar-header">' +
+        ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
+        '   Table of Contents' +
+        ' </button>' +
+        ' <span class="navbar-brand" id="headline">'+ pageTitle + '</span>' +
+        '</div>' +
+        '<div class="toc collapse navbar-collapse"></div>'),
+      navbarTocEl  = $(newNavbarEl[1]),
+      tocContent   = ''
+      ;
+
+
+
+  navbarTocEl.append($('<ul/>', {
+      'class': 'nav navbar-nav col-sm-2',
+      'html': makeToc(contentEl)
+  }));
+  $(navbarEl).parent().replaceWith(newNavbarEl);
+  
+  $('body')
+    .attr('data-spy','scroll')
+    .attr('data-target','.toc');
+
+  contentEl.addClass('col-sm-10 col-sm-offset-2');
+
+
+  function makeToc (content) {
+    var levelClassPrefix = 'level-',
+        headerLevels = 'h1,h2,h3',
+        tocItemTpl = [       // poor man's String.format
+          '<li><a href="#',
+          '',                // 1 - hash
+          '">',
+          '',                // 3 - title
+          '</a>'
+        ],
+        titleMap = {},
+        tocString = '',
+        prevLevel
+        ;
+
+    contentEl.find(headerLevels).each(function indexHeaders (index, elem) {
+      var header = analyzeHeader(elem);
+
+      // Building the tag hierarchy
+      if (!prevLevel) {
+        // Initialization, <ul> tag not needed
+      } else if (header.level > prevLevel) {
+        tocString += '<ul>';
+      } else if (header.level < prevLevel) {
+        tocString += '</ul></li>';
+      } else {
+        tocString += '</li>';
+      }
+
+      // add <li>
+      tocString += buildTocItem(header.hash, header.title, header.level -1);
+      elem.id = header.hash;
+      prevLevel = header.level;
+    });
+
+    return tocString;
+
+
+    function analyzeHeader (elem) {
+      var header = {},
+          childHash = ''
+          ;
+
+      header.level = elem.tagName[1];  // extract the number from h1,h2, etc.
+      header.jq = $(elem);
+      header.title = header.jq.text();  // innerHTML would keep inner tags.
+
+      // If a child element already has a hash, just use that
+      var firstHashBearerChild = header.jq.children('[id],[name]')[0];
+      if (firstHashBearerChild) {
+        header.hash = firstHashBearerChild.id || firstHashBearerChild.name;
+      }
+
+      if (! header.hash) {
+        // Compute a new hash
+        var tmpHash = header.title.replace(/[^A-Za-z0-9_-]/g, '');
+        header.hash = getAvailableHash(tmpHash, titleMap);
+      } else {
+        titleMap[header.hash] = true; 
+      }
+
+      return header;
+    }
+
+    function getAvailableHash (hash, titleMap) {
+      // Todo improve hashing: avoid multiplying the _'s and
+      // get to the next free hash faster.
+      // Also do a first pass to process the user-specified ids
+      if (titleMap[hash]) {
+        return getAvailableHash(hash + '_', titleMap);
+      } else {
+        titleMap[hash] = true;
+        return hash;
       }
     }
-    var originBase = origin.substr(0, origin.lastIndexOf('/'));
+
+
+    function buildTocItem (hash, title) {
+      tocItemTpl[1] = hash || 'hashError';
+      tocItemTpl[3] = title || 'titleError';
+      return tocItemTpl.join('');
+    }
   }
 
-  var linkEl = document.createElement('link');
-    linkEl.href = window.originBase + '/themes/jquery.tocify.css';
-    linkEl.rel = 'stylesheet';
-    document.head.appendChild(linkEl);
-
-
-  var toc = $("#toc");
-  toc.tocify({
-    selectors: "h1,h2,h3" // title levels used
-  }).data("toc-tocify"); 
-  // It's highly probable that the content and the table are already in a container. Remove this one.
-  $("#content").removeClass("container"); 
-  toc.show();
 })(window.jQuery, window, document);
