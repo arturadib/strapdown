@@ -388,9 +388,9 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
   document.head.appendChild(linkEl);
 
   // Check if ToC is required
-  if (markdownEl.getAttribute('data-toc')) {
+  if (markdownEl.getAttribute('toc')) {
     // Extra features: back to top
-    var tocTopLink = markdownEl.getAttribute('data-toc-top-link');
+    var tocTopLink = markdownEl.getAttribute('toc-top-link');
     if (tocTopLink) {
       window.strapdownToc = {
         includeBackToTopLink: true
