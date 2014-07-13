@@ -32,7 +32,7 @@ tocBundle.to outDir + '/strapdown-toc.js'
 
 # CSS
 cp '-f', 'src/strapdown.css', outDir
-cp '-f', 'src/strapdown-toc.css', outDir
+exec "lessc src/strapdown-toc.less #{outDir}/strapdown-toc.css", {silent: false}
 mkdir '-p', outDir + '/themes'
 cp '-f', 'vendor/themes/*', outDir + '/themes'
 

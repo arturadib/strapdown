@@ -31,7 +31,7 @@
 
 
   navbarTocEl.append($('<ul/>', {
-      'class': 'nav navbar-nav col-sm-2',
+      'class': 'nav navbar-nav',
       'html': makeToc(contentEl)
   }));
   $(navbarEl).parent().replaceWith(newNavbarEl);
