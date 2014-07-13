@@ -107,16 +107,19 @@ body h3[id] {
     width: 100%;
     pointer-events: none;
   }
-  .toc > .nav {
+  .toc .nav {
     width: 15%;
     padding-right: 5px;
   }
-  .toc > ul {
+  .toc ul {
     pointer-events: auto;
   }
-  .toc > li {
+  .toc li {
     float: none;
   }
+}
+.toc #backTop {
+  padding-top: 20px;
 }
 /* Styles in xs mode  */
 @media screen and (max-width: 767px) {

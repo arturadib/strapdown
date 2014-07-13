@@ -28,11 +28,11 @@
       tocContent   = ''
       ;
 
-
+  console.log(document.getElementsByTagName('xmp')[0], document.getElementsByTagName('textarea')[0]);
 
   navbarTocEl.append($('<ul/>', {
-      'class': 'nav navbar-nav',
-      'html': makeToc(contentEl)
+    'class': 'nav navbar-nav',
+    'html': makeToc(contentEl)
   }));
   $(navbarEl).parent().replaceWith(newNavbarEl);
   
@@ -77,6 +77,14 @@
       elem.id = header.hash;
       prevLevel = header.level;
     });
+
+    if (window.strapdownToc && window.strapdownToc.includeBackToTopLink) {
+      var label = window.strapdownToc.backToTopLinkLabel || 'Back to top';
+      tocString += '<li>' +
+          '<a href="#" id="backTop"' +
+          ' onlick="jQuery(\'html,body\').animate({scrollTop:0},0);" >' +
+          label + '</a></li>';
+    }
 
     return tocString;
 

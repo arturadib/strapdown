@@ -389,8 +389,20 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
 
   // Check if ToC is required
   if (markdownEl.getAttribute('data-toc')) {
+    // Extra features: back to top
+    var tocTopLink = markdownEl.getAttribute('data-toc-top-link');
+    if (tocTopLink) {
+      window.strapdownToc = {
+        includeBackToTopLink: true
+      };
+
+      if (tocTopLink !== '1' && tocTopLink !== 'true') {
+        window.strapdownToc.backToTopLinkLabel = tocTopLink;
+      }
+    }
+
     // Add scripts
-    var script;
+    var scriptEl;
 
     scriptEl = document.createElement('script');
     scriptEl.src = originBase + '/jquery.min.js';
@@ -408,6 +420,7 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
     linkEl.href = originBase + '/strapdown-toc.css';
     linkEl.rel = 'stylesheet';
     document.head.appendChild(linkEl);
+
   }
 
 
