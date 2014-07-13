@@ -58,6 +58,7 @@ body h3[id] {
 .toc ul > li > a {
   padding-left: 20px;
   margin-left: -20px;
+  font-size: 14px;
 }
 .toc ul > li.active > a {
   font-weight: bold;
@@ -74,6 +75,7 @@ body h3[id] {
 .toc ul ul > li > a {
   padding-left: 30px;
   margin-left: -30px;
+  font-size: 13px;
 }
 .toc ul ul > li.active > a {
   font-weight: bold;
@@ -90,6 +92,7 @@ body h3[id] {
 .toc ul ul ul > li > a {
   padding-left: 40px;
   margin-left: -40px;
+  font-size: 12px;
 }
 .toc ul ul ul > li.active > a {
   font-weight: bold;
@@ -108,7 +111,7 @@ body h3[id] {
     pointer-events: none;
   }
   .toc .nav {
-    width: 15%;
+    width: 14%;
     padding-right: 5px;
   }
   .toc ul {

@@ -5,7 +5,7 @@
 @list-base-indent: 10px;
 @list-indent-per-lvl: 10px;
 @max-xs-screen-width: 767px;
-@toc-width: 15%; /* based on col-sm-2 (16.67%), but a bit smaller to leave 
+@toc-width: 14%; /* based on col-sm-2 (16.67%), but a bit smaller to leave 
 	              * some space to the content*/
 @toc-link-color: #158CBA; /* Default link color (when not inverse) */
 
@@ -27,7 +27,8 @@
 
 			&>a {
 				padding-left: @indent; 
-				margin-left: -@indent; 
+				margin-left: -@indent;
+				font-size: 15px - @level;
 			}
 			&.active>a {
 				font-weight: bold;
