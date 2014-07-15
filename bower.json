@@ -1,0 +1,32 @@
+{
+  "name": "strapdown",
+  "version": "0.0.0",
+  "homepage": "http://strapdownjs.com",
+  "description": "Instant and elegant Markdown documents in the browser",
+  "main": [
+    "src/strapdown.js",
+    "src/strapdown.css"
+  ],
+  "keywords": [
+    "markdown",
+    "strapdown",
+    "marked",
+    "jquery"
+  ],
+  "authors": [
+    "Artur Adib"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "marked": "~0.3.2",
+    "prettify": "*"
+  }
+}
