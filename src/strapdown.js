@@ -165,6 +165,13 @@
     tableEl.className = 'table table-striped table-bordered';
   }
 
+  // Make the images responsive
+  var imgEls = document.getElementsByTagName('img');
+  for (var i=0, ii=imgEls.length; i<ii; i++) {
+    var imgEl = imgEls[i];
+    imgEl.className = 'img-responsive';
+  }
+
   // All done - show body
   document.body.style.display = '';
 

@@ -82,10 +82,9 @@
 
     if (window.strapdownToc && window.strapdownToc.includeBackToTopLink) {
       var label = window.strapdownToc.backToTopLinkLabel || 'Back to top';
-      tocString += '<li>' +
-          '<a href="#" id="backTop"' +
-          ' onlick="jQuery(\'html,body\').animate({scrollTop:0},0);" >' +
-          label + '</a></li>';
+      tocString += '<li><a href="#" id="backTop" onlick="' +
+                   'jQuery(\'html,body\').animate({scrollTop:0},0);' +
+                   '" >' + label + '</a></li>';
     }
 
     return tocString;
