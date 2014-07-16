@@ -53,11 +53,11 @@ body h3[id] {
   padding-left: 0px;
 }
 .toc ul > li {
-  padding-left: 10px;
+  padding-left: 15px;
 }
 .toc ul > li > a {
-  padding-left: 20px;
-  margin-left: -20px;
+  padding-left: 15px;
+  margin-left: -15px;
   font-size: 14px;
 }
 .toc ul > li.active > a {
@@ -66,11 +66,11 @@ body h3[id] {
 @media screen and (min-width: 768px) {
   .toc ul > li.active > a {
     border-left: 2px solid;
-    margin-left: -22px;
+    margin-left: -17px;
   }
 }
 .toc ul ul > li {
-  padding-left: 10px;
+  padding-left: 15px;
 }
 .toc ul ul > li > a {
   padding-left: 30px;
@@ -87,11 +87,11 @@ body h3[id] {
   }
 }
 .toc ul ul ul > li {
-  padding-left: 10px;
+  padding-left: 15px;
 }
 .toc ul ul ul > li > a {
-  padding-left: 40px;
-  margin-left: -40px;
+  padding-left: 45px;
+  margin-left: -45px;
   font-size: 12px;
 }
 .toc ul ul ul > li.active > a {
@@ -100,7 +100,7 @@ body h3[id] {
 @media screen and (min-width: 768px) {
   .toc ul ul ul > li.active > a {
     border-left: 2px solid;
-    margin-left: -42px;
+    margin-left: -47px;
   }
 }
 @media screen and (min-width: 768px) {
@@ -111,7 +111,7 @@ body h3[id] {
     pointer-events: none;
   }
   .toc .nav {
-    width: 14%;
+    width: 13.5%;
     padding-right: 5px;
   }
   .toc ul {

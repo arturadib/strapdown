@@ -55,7 +55,7 @@
       } else if (header.level > prevLevel) {
         tocString += '<ul>';
       } else if (header.level < prevLevel) {
-        tocString += '</ul></li>';
+        tocString += generateClosingTags(prevLevel, header.level);
       } else {
         tocString += '</li>';
       }
@@ -66,12 +66,13 @@
       prevLevel = header.level;
     });
 
+    tocString += generateClosingTags(prevLevel, 1);
+
     if (window.strapdownToc && window.strapdownToc.includeBackToTopLink) {
       var label = window.strapdownToc.backToTopLinkLabel || 'Back to top';
-      tocString += '<li>' +
-          '<a href="#" id="backTop"' +
-          ' onlick="jQuery(\'html,body\').animate({scrollTop:0},0);" >' +
-          label + '</a></li>';
+      tocString += '<li><a href="#" id="backTop" onlick="' +
+                   'jQuery(\'html,body\').animate({scrollTop:0},0);' +
+                   '" >' + label + '</a></li>';
     }
 
     return tocString;
@@ -120,6 +121,16 @@
       tocItemTpl[1] = hash || 'hashError';
       tocItemTpl[3] = title || 'titleError';
       return tocItemTpl.join('');
+    }
+
+    function generateClosingTags(previousLevel, currentLevel) {
+      var difference = prevLevel - currentLevel,
+          closingTags = ''
+          ;
+
+      while (difference--) closingTags += '</ul>';
+      closingTags += '</li>';
+      return closingTags;
     }
   }
 
