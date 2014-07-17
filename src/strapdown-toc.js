@@ -16,17 +16,17 @@
       tocContent   = ''
       ;
 
-  console.log(document.getElementsByTagName('xmp')[0], document.getElementsByTagName('textarea')[0]);
-
   navbarTocEl.append($('<ul/>', {
     'class': 'nav navbar-nav',
     'html': makeToc(contentEl)
   }));
   $(navbarEl).parent().replaceWith(newNavbarEl);
   
-  $('body')
-    .attr('data-spy','scroll')
-    .attr('data-target','.toc');
+
+  $('body').scrollspy({ target: '.toc' });
+  // $('body')
+  //   .attr('data-spy','scroll')
+  //   .attr('data-target','.toc');
 
   contentEl.addClass('col-sm-10 col-sm-offset-2');
 

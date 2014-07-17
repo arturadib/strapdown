@@ -78,7 +78,13 @@
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
-  // Check if ToC is required
+  //////////////////////////////////////////////////////////////////////
+  //
+  // Extra features
+
+  var delayedLoads = [];
+
+  // Table of contents
   if (markdownEl.getAttribute('toc')) {
     // Extra features: back to top
     var tocTopLink = markdownEl.getAttribute('toc-top-link');
@@ -92,18 +98,18 @@
       }
     }
 
-    // Add scripts
-    var scriptEl;
+    delayedLoads.push(function ()  {
+      var scriptEl;
 
-    scriptEl = document.createElement('script');
-    scriptEl.src = originBase + '/strapdown-toc.js';
-    document.head.appendChild(scriptEl);
+      scriptEl = document.createElement('script');
+      scriptEl.src = originBase + '/strapdown-toc.js';
+      document.head.appendChild(scriptEl);
 
-    linkEl = document.createElement('link');
-    linkEl.href = originBase + '/strapdown-toc.css';
-    linkEl.rel = 'stylesheet';
-    document.head.appendChild(linkEl);
-
+      linkEl = document.createElement('link');
+      linkEl.href = originBase + '/strapdown-toc.css';
+      linkEl.rel = 'stylesheet';
+      document.head.appendChild(linkEl);
+    });
   }
 
 
@@ -166,5 +172,12 @@
 
   // All done - show body
   document.body.style.display = '';
+
+  // Register the delayed loads
+  window.onload = function() {
+    for (var i=0, ii=delayedLoads.length; i<ii; i++) {
+      delayedLoads[i]();
+    }
+  }
 
 })(window, document);
