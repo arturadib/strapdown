@@ -96,14 +96,6 @@
     var scriptEl;
 
     scriptEl = document.createElement('script');
-    scriptEl.src = originBase + '/jquery.min.js';
-    document.head.appendChild(scriptEl);
-
-    scriptEl = document.createElement('script');
-    scriptEl.src = originBase + '/bootstrap.min.js';
-    document.head.appendChild(scriptEl);
-
-    scriptEl = document.createElement('script');
     scriptEl.src = originBase + '/strapdown-toc.js';
     document.head.appendChild(scriptEl);
 
