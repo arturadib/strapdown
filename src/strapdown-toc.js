@@ -1,53 +1,73 @@
 ;(function($, window, document) {
-  "use strict";
+  'use strict';
 
-  var contentEl    = $('#content'),
-      navbarEl     = $('#headline'),
-      pageTitle    = navbarEl.text(),
-      newNavbarEl  = $('' +
-        '<div class="navbar-header">' +
-        ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
-        '   Table of Contents' +
-        ' </button>' +
-        ' <span class="navbar-brand" id="headline">'+ pageTitle + '</span>' +
-        '</div>' +
-        '<div class="toc collapse navbar-collapse"></div>'),
-      navbarTocEl  = $(newNavbarEl[1]),
-      tocContent   = ''
-      ;
+  console.log('toc');
 
-  navbarTocEl.append($('<ul/>', {
-    'class': 'nav navbar-nav',
-    'html': makeToc(contentEl)
-  }));
-  $(navbarEl).parent().replaceWith(newNavbarEl);
-  
+  function makeToc (contentEl) {
 
-  $('body').scrollspy({ target: '.toc' });
-  // $('body')
-  //   .attr('data-spy','scroll')
-  //   .attr('data-target','.toc');
+    function getAvailableHash (hash, titleMap) {
+      // Todo improve hashing: avoid multiplying the _'s and
+      // get to the next free hash faster.
+      // Also do a first pass to process the user-specified ids
+      if (titleMap[hash]) {
+        return getAvailableHash(hash + '_', titleMap);
+      } else {
+        titleMap[hash] = true;
+        return hash;
+      }
+    }
 
-  contentEl.addClass('col-sm-10 col-sm-offset-2');
+    function analyzeHeader (elem, titleMap) {
+      var header = {},
+          jqElem = $(elem),
+          firstHashBearerChild = jqElem.children('[id],[name]')[0]
+          ;
 
+      header.jq = jqElem;
+      header.level = elem.tagName[1];  // extract the number from h1,h2, etc.
+      header.title = header.jq.text();  // innerHTML would keep inner tags.
 
-  function makeToc (content) {
-    var levelClassPrefix = 'level-',
-        headerLevels = 'h1,h2,h3',
-        tocItemTpl = [       // poor man's String.format
-          '<li><a href="#',
-          '',                // 1 - hash
-          '">',
-          '',                // 3 - title
-          '</a>'
-        ],
+      // If a child element already has a hash, just use that
+      if (firstHashBearerChild) {
+        header.hash = firstHashBearerChild.id || firstHashBearerChild.name;
+      }
+
+      if (! header.hash) {
+        // Compute a new hash
+        var tmpHash = header.title.replace(/[^A-Za-z0-9_-]/g, '');
+        header.hash = getAvailableHash(tmpHash, titleMap);
+      } else {
+        titleMap[header.hash] = true;
+      }
+
+      return header;
+    }
+
+    function buildTocItem (hash, title) {
+      // The <li> is to be closed when all his children have been added.
+      return '<li><a href="#' + hash + '">' + title + '</a>';
+    }
+
+    function generateClosingTags(previousLevel, currentLevel) {
+      var difference = previousLevel - currentLevel,
+          closingTags = ''
+          ;
+
+      while (difference--) {
+        closingTags += '</ul>';
+      }
+      closingTags += '</li>';
+      return closingTags;
+    }
+
+    var headerLevels = 'h1,h2,h3',
         titleMap = {},
         tocString = '',
         prevLevel
         ;
 
     contentEl.find(headerLevels).each(function indexHeaders (index, elem) {
-      var header = analyzeHeader(elem);
+      var header = analyzeHeader(elem, titleMap);
 
       // Building the tag hierarchy
       if (!prevLevel) {
@@ -76,62 +96,37 @@
     }
 
     return tocString;
-
-
-    function analyzeHeader (elem) {
-      var header = {},
-          childHash = ''
-          ;
-
-      header.level = elem.tagName[1];  // extract the number from h1,h2, etc.
-      header.jq = $(elem);
-      header.title = header.jq.text();  // innerHTML would keep inner tags.
-
-      // If a child element already has a hash, just use that
-      var firstHashBearerChild = header.jq.children('[id],[name]')[0];
-      if (firstHashBearerChild) {
-        header.hash = firstHashBearerChild.id || firstHashBearerChild.name;
-      }
-
-      if (! header.hash) {
-        // Compute a new hash
-        var tmpHash = header.title.replace(/[^A-Za-z0-9_-]/g, '');
-        header.hash = getAvailableHash(tmpHash, titleMap);
-      } else {
-        titleMap[header.hash] = true; 
-      }
-
-      return header;
-    }
-
-    function getAvailableHash (hash, titleMap) {
-      // Todo improve hashing: avoid multiplying the _'s and
-      // get to the next free hash faster.
-      // Also do a first pass to process the user-specified ids
-      if (titleMap[hash]) {
-        return getAvailableHash(hash + '_', titleMap);
-      } else {
-        titleMap[hash] = true;
-        return hash;
-      }
-    }
-
-
-    function buildTocItem (hash, title) {
-      tocItemTpl[1] = hash || 'hashError';
-      tocItemTpl[3] = title || 'titleError';
-      return tocItemTpl.join('');
-    }
-
-    function generateClosingTags(previousLevel, currentLevel) {
-      var difference = prevLevel - currentLevel,
-          closingTags = ''
-          ;
-
-      while (difference--) closingTags += '</ul>';
-      closingTags += '</li>';
-      return closingTags;
-    }
   }
+
+  console.log('run');
+
+  debugger; // jshint ignore:line
+
+  var contentEl    = $('#content'),
+      navbarEl     = $('#headline'),
+      pageTitle    = navbarEl.text(),
+      newNavbarEl  = $('' +
+        '<div class="navbar-header">' +
+        ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
+        '   Table of Contents' +
+        ' </button>' +
+        ' <span class="navbar-brand" id="headline">'+ pageTitle + '</span>' +
+        '</div>' +
+        '<div class="toc collapse navbar-collapse"></div>'),
+      navbarTocEl  = $(newNavbarEl[1])
+      ;
+
+  navbarTocEl.append($('<ul/>', {
+    'class': 'nav navbar-nav',
+    'html': makeToc(contentEl)
+  }));
+
+  $(navbarEl).parent().replaceWith(newNavbarEl);
+
+  $('body').scrollspy({ target: '.toc' });
+
+  contentEl.addClass('col-sm-10 col-sm-offset-2');
+
+  console.log('run done');
 
 })(window.jQuery, window, document);

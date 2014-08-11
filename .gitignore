@@ -1,2 +1,4 @@
 node_modules/
 *.sublime-*
+vendor/
+dist/
