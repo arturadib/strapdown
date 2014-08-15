@@ -460,7 +460,7 @@ h={};g()}};typeof define==="function"&&define.amd&&define("google-code-prettify"
         navbarEl     = $(options.navbar),
         // navbarEl     = options.navbar, // $('#headline'),
         pageTitle    = navbarEl.text(),
-        target = 'body',
+        spiedEl = $('body'),
         newNavbarEl  = $('' +
           '<div class="navbar-header">' +
           ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
@@ -472,7 +472,6 @@ h={};g()}};typeof define==="function"&&define.amd&&define("google-code-prettify"
         navbarTocEl  = newNavbarEl.eq(1) // TODO try to split the declaration, then merge with newNavbarEl = newNavbarEl.add(navbarTocEl)
         ;
 
-    contentEl.addClass('col-sm-10 col-sm-offset-2');
 
     navbarTocEl.append($('<ul/>', {
       'class': 'nav navbar-nav',
@@ -481,11 +480,14 @@ h={};g()}};typeof define==="function"&&define.amd&&define("google-code-prettify"
 
     $(navbarEl).parent().replaceWith(newNavbarEl);
 
+    // The spiedEl.scrollspy() form doesn't seem to work, so I'm adding the attributes instead
+    // (the pure js form works but doesn't put the first link as active. You have to scroll first.)
+    // $('body').scrollspy({ target: '.toc', offset: 70 });
+    spiedEl.attr('data-target', '.toc');
+    spiedEl.attr('data-spy', 'scroll');
+    spiedEl.attr('data-offset', '70' /* Height of the navbar + standard offset */);
 
-    $(target).scrollspy({ target: '.toc', offset: 70 /* Height of the navbar + standard offset */ });
-    window.setTimeout(function () {
-      $(target).scrollspy('refresh');
-    }, 1000);
+    contentEl.addClass('col-sm-10 col-sm-offset-2');
 
     return this;
   };
