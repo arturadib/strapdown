@@ -1,23 +1,21 @@
-;(function($, window, document) {
+/* global jQuery */
+(function( $ ) {
   'use strict';
 
-  console.log('toc');
-
-  function makeToc (contentEl) {
-
-    function getAvailableHash (hash, titleMap) {
+  var _ = {
+    getAvailableHash: function (hash, titleMap) {
       // Todo improve hashing: avoid multiplying the _'s and
       // get to the next free hash faster.
       // Also do a first pass to process the user-specified ids
       if (titleMap[hash]) {
-        return getAvailableHash(hash + '_', titleMap);
+        return _.getAvailableHash(hash + '_', titleMap);
       } else {
         titleMap[hash] = true;
         return hash;
       }
-    }
+    },
 
-    function analyzeHeader (elem, titleMap) {
+    analyzeHeader: function  (elem, titleMap) {
       var header = {},
           jqElem = $(elem),
           firstHashBearerChild = jqElem.children('[id],[name]')[0]
@@ -35,20 +33,20 @@
       if (! header.hash) {
         // Compute a new hash
         var tmpHash = header.title.replace(/[^A-Za-z0-9_-]/g, '');
-        header.hash = getAvailableHash(tmpHash, titleMap);
+        header.hash = _.getAvailableHash(tmpHash, titleMap);
       } else {
         titleMap[header.hash] = true;
       }
 
       return header;
-    }
+    },
 
-    function buildTocItem (hash, title) {
+    buildTocItem: function  (hash, title) {
       // The <li> is to be closed when all his children have been added.
       return '<li><a href="#' + hash + '">' + title + '</a>';
-    }
+    },
 
-    function generateClosingTags(previousLevel, currentLevel) {
+    generateClosingTags: function (previousLevel, currentLevel) {
       var difference = previousLevel - currentLevel,
           closingTags = ''
           ;
@@ -58,75 +56,85 @@
       }
       closingTags += '</li>';
       return closingTags;
-    }
+    },
 
-    var headerLevels = 'h1,h2,h3',
-        titleMap = {},
-        tocString = '',
-        prevLevel
-        ;
+    makeToc: function  (contentEl) {
 
-    contentEl.find(headerLevels).each(function indexHeaders (index, elem) {
-      var header = analyzeHeader(elem, titleMap);
+      var headerLevels = 'h1,h2,h3',
+          titleMap = {},
+          tocString = '',
+          prevLevel
+          ;
 
-      // Building the tag hierarchy
-      if (!prevLevel) {
-        // Initialization, <ul> tag not needed
-      } else if (header.level > prevLevel) {
-        tocString += '<ul>';
-      } else if (header.level < prevLevel) {
-        tocString += generateClosingTags(prevLevel, header.level);
-      } else {
-        tocString += '</li>';
+      contentEl.find(headerLevels).each(function indexHeaders (index, elem) {
+        var header = _.analyzeHeader(elem, titleMap);
+
+        // Building the tag hierarchy
+        if (!prevLevel) {
+          // Initialization, <ul> tag not needed
+        } else if (header.level > prevLevel) {
+          tocString += '<ul>';
+        } else if (header.level < prevLevel) {
+          tocString += _.generateClosingTags(prevLevel, header.level);
+        } else {
+          tocString += '</li>';
+        }
+
+        // add <li>
+        tocString += _.buildTocItem(header.hash, header.title, header.level -1);
+        elem.id = header.hash;
+        prevLevel = header.level;
+      });
+
+      tocString += _.generateClosingTags(prevLevel, 1);
+
+      if (_.tocData && _.tocData.includeBackToTopLink) {
+        var label = _.tocData.backToTopLinkLabel || 'Back to top';
+        tocString += '<li><a href="#" id="backTop" onlick="' +
+                     'jQuery(\'html,body\').animate({scrollTop:0},0);' +
+                     '" >' + label + '</a></li>';
       }
 
-      // add <li>
-      tocString += buildTocItem(header.hash, header.title, header.level -1);
-      elem.id = header.hash;
-      prevLevel = header.level;
-    });
-
-    tocString += generateClosingTags(prevLevel, 1);
-
-    if (window.strapdownToc && window.strapdownToc.includeBackToTopLink) {
-      var label = window.strapdownToc.backToTopLinkLabel || 'Back to top';
-      tocString += '<li><a href="#" id="backTop" onlick="' +
-                   'jQuery(\'html,body\').animate({scrollTop:0},0);' +
-                   '" >' + label + '</a></li>';
+      return tocString;
     }
+  };
 
-    return tocString;
-  }
+  $.fn.strapdownToc = function (options) {
+    var contentEl    = this, // $('#content')
+        navbarEl     = $(options.navbar),
+        // navbarEl     = options.navbar, // $('#headline'),
+        pageTitle    = navbarEl.text(),
+        target = 'body',
+        newNavbarEl  = $('' +
+          '<div class="navbar-header">' +
+          ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
+          '   Table of Contents' +
+          ' </button>' +
+          ' <span class="navbar-brand" id="headline">'+ pageTitle + '</span>' +
+          '</div>' +
+          '<div class="toc collapse navbar-collapse"></div>'),
+        navbarTocEl  = newNavbarEl.eq(1) // TODO try to split the declaration, then merge with newNavbarEl = newNavbarEl.add(navbarTocEl)
+        ;
 
-  console.log('run');
+    contentEl.addClass('col-sm-10 col-sm-offset-2');
 
-  debugger; // jshint ignore:line
+    navbarTocEl.append($('<ul/>', {
+      'class': 'nav navbar-nav',
+      'html': _.makeToc(contentEl)
+    }));
 
-  var contentEl    = $('#content'),
-      navbarEl     = $('#headline'),
-      pageTitle    = navbarEl.text(),
-      newNavbarEl  = $('' +
-        '<div class="navbar-header">' +
-        ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
-        '   Table of Contents' +
-        ' </button>' +
-        ' <span class="navbar-brand" id="headline">'+ pageTitle + '</span>' +
-        '</div>' +
-        '<div class="toc collapse navbar-collapse"></div>'),
-      navbarTocEl  = $(newNavbarEl[1])
-      ;
+    $(navbarEl).parent().replaceWith(newNavbarEl);
 
-  navbarTocEl.append($('<ul/>', {
-    'class': 'nav navbar-nav',
-    'html': makeToc(contentEl)
-  }));
 
-  $(navbarEl).parent().replaceWith(newNavbarEl);
+    $(target).scrollspy({ target: '.toc', offset: 70 /* Height of the navbar + standard offset */ });
+    window.setTimeout(function () {
+      $(target).scrollspy('refresh');
+    }, 1000);
 
-  $('body').scrollspy({ target: '.toc' });
+    return this;
+  };
 
-  contentEl.addClass('col-sm-10 col-sm-offset-2');
+  // For testing purposes
+  $.fn.strapdownToc._internals = _;
 
-  console.log('run done');
-
-})(window.jQuery, window, document);
+}( jQuery ));

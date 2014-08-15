@@ -4,20 +4,15 @@
   <title>Strapdown.js - Instant and elegant Markdown documents</title>
   <meta charset="utf-8" />
   <meta name="description" content="Create Markdown documents using JavaScript and Bootstrap themes" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-924459-10']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+    ga('create', 'UA-41650056-2', 'auto');
+    ga('send', 'pageview');
+  </script>
 </head>
 
 <body>
@@ -107,9 +102,12 @@ All credit goes to the projects below that make up most of Strapdown.js:
 + [jQuery](http://jquery.com) - Changes the way you write Javascript
 + [Twitter Bootstrap](http://getbootstrap.com/) - Beautiful, responsive CSS framework
 + [Bootswatch](http://bootswatch.com) - Additional Bootstrap themes
-
-
 </textarea>
-<script src="v/0.3/strapdown.js"></script>
+
+
+<!-- grunt:update-version-start -->
+<script src="v/0.4/strapdown.js"></script>
+<!-- grunt:update-version-end -->
+
 </body>
 </html>

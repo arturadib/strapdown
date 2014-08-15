@@ -1,5 +1,63 @@
+/******************************************************************************
+ * Library imports
+ *****************************************************************************/
+
 @import (less) 'vendor/bootswatch/lumen/bootstrap.css';
-// @import 'vendor/bootstrap/less/bootstrap.less';
-@import (less) 'src/strapdown.css';
+@import (less) 'vendor/google-code-prettify/bin/prettify.min.css';
+
+
+/******************************************************************************
+ * Variables
+ *****************************************************************************/
+
+@navbar-height: 60px;
+@list-base-indent: 0px;
+@list-indent-per-lvl: 15px;
+@max-xs-screen-width: 767px;
+@toc-width: 13.5%; /* based on col-sm-2 (16.67%), but a bit smaller to leave
+	              * some space to the content*/
+@toc-link-color: #158CBA; /* Default link color (when not inverse) */
+
+
+
+/******************************************************************************
+ * This chunk is to fix Bootstrap so that the Markdown output looks good
+ * (From original Strapdown)
+ *****************************************************************************/
+
+body {
+  padding-top: @navbar-height;
+  padding-bottom: 40px;
+  font-size: 15px;
+  line-height: 150%;
+}
+
+xmp, textarea {
+  display: none;
+}
+
+h1,h2,h3,h4 {
+  margin: 15px 0;
+}
+
+pre {
+  margin: 20px 0;
+}
+
+img {
+  margin: 10px 0;
+}
+
+.navbar {
+  z-index: 1;
+}
+
+.table {
+  width: auto;
+}
+
+/******************************************************************************
+ * Other files to include
+ *****************************************************************************/
 
 @import 'src/strapdown-toc.less';

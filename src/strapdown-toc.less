@@ -1,16 +1,4 @@
 /******************************************************************************
- * Variables
- *****************************************************************************/
-@navbar-height: 60px;
-@list-base-indent: 0px;
-@list-indent-per-lvl: 15px;
-@max-xs-screen-width: 767px;
-@toc-width: 13.5%; /* based on col-sm-2 (16.67%), but a bit smaller to leave 
-	              * some space to the content*/
-@toc-link-color: #158CBA; /* Default link color (when not inverse) */
-
-
-/******************************************************************************
  * Mixins
  *****************************************************************************/
 
@@ -26,16 +14,16 @@
 			padding-left: @list-indent-per-lvl;
 
 			&>a {
-				padding-left: @indent; 
+				padding-left: @indent;
 				margin-left: -@indent;
 				font-size: 15px - @level;
 			}
 			&.active>a {
 				font-weight: bold;
-				
+
 				@media screen and (min-width: 768px) {
 					border-left: 2px solid;
-					margin-left: (-2px - @indent); 
+					margin-left: (-2px - @indent);
 				}
 			}
 		}
@@ -87,7 +75,7 @@ body {
 			padding-top: 7px;
 			padding-bottom: 0px;
 		}
-		
+
 		&>li {
 			padding-left:0px;
 		}
@@ -105,7 +93,7 @@ body {
 
 		.nav {
 			width: @toc-width;
-			padding-right: 5px; 
+			padding-right: 5px;
 		}
 		ul {
 			pointer-events:auto;
@@ -119,7 +107,7 @@ body {
 	#backTop {
 		padding-top: 20px;
 	}
-	
+
 }
 
 /* Styles in xs mode  */
@@ -140,6 +128,6 @@ body {
 			color: #333;
 			text-decoration: none;
 		}
-			
+
 	}
 }
