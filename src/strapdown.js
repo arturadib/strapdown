@@ -2,6 +2,11 @@
 (function( $ ) {
   'use strict';
 
+  var acceptedAttributes  = {
+    'toc' : 'toc',
+    'toc-top-link' : 'tocTopLink'
+  };
+
   var _ = {
     getStrapdownOrigin: function () {
       var scriptEls = document.getElementsByTagName('script'),
@@ -18,20 +23,21 @@
       throw 'Unable to get the strapdown origin';
     },
 
-    updateHead: function (options) {
-      var titleEl = document.getElementsByTagName('title')[0],
-          navbarEl = $('.navbar').get(0),
-          $head = $(document.head)
-          ;
-
-      // Use <meta> viewport so that Bootstrap is actually responsive on mobile
-      $head.prepend($('<meta name="viewport" content="width=device-width, initial-scale=1">')); // why was it 'max/min width = 1'?
-
+    importCss: function () {
       // @TODO proper theme management
-      $head.append($('<link/>', {href: _.getStrapdownOrigin() + '/strapdown.css', rel: 'stylesheet'}));
+      $(document.head).append($('<link/>', {href: _.getStrapdownOrigin() + '/strapdown.css', rel: 'stylesheet'}));
+    },
 
+    updateHead: function (options) {
+      // Use <meta> viewport so that Bootstrap is actually responsive on mobile
+      $(document.head).prepend($('<meta name="viewport" content="width=device-width, initial-scale=1">')); // why was it 'max/min width = 1'?
+      _.importCss();
+    },
 
-         // Insert navbar if there's none
+    updateNavbar: function () {
+      var titleEl = document.getElementsByTagName('title')[0],
+          navbarEl = $('.navbar').get(0);
+        // Insert navbar if there's none
       if (!navbarEl && titleEl) {
         var newNode = document.createElement('div');
         newNode.className = 'navbar navbar-inverse navbar-fixed-top';
@@ -41,10 +47,9 @@
 
         document.body.insertBefore(newNode, document.body.firstChild);
       }
-
     },
 
-    updateDom: function (contentEl) {
+    updateBody: function (contentEl) {
       if (!marked) {
         throw 'Marked not found. Unable to proceed further.';
       }
@@ -78,65 +83,76 @@
       });
 
       return newContentEl;
+    },
+
+    extractAttributeOptions: function (mdEl) {
+      var htmlOptions = {};
+
+      $.each(mdEl.get(0).attributes, function (idx, el) {
+        if (el.name.indexOf('toc') === 0) {
+          if (! htmlOptions.toc) {
+            htmlOptions.toc = {};
+          }
+          switch (el.name) {
+            case 'toc-top-link':
+              htmlOptions.toc.topLink = el.value ? el.value : 'Back to top';
+              break;
+          }
+        }
+      });
+      return htmlOptions;
+    },
+
+    normalizeOptions: function (attributeOptions, jsOptions) {
+      var settings =  $.extend({}, $.fn.strapdown.defaults, attributeOptions, jsOptions);
+
+      if (settings.toc) {
+        settings.toc.insertionPoint = settings.toc.insertionPoint || '#headline';
+      }
+
+      return settings;
     }
 
   };
 
   $.fn.strapdown = function (options) {
-    var settings = $.extend($.strapdown.defaults, options );
+    var target;
 
-    // var updatedContent = _.updateDom(this);
-
-    // if (settings.toc) {
-    //   var el  = $('#content');
-    //   if (el.length > 0) {
-    //     console.log(el);
-    //     el.eq(0).strapdownToc(settings.toc);
-    //   }
-    // }
-
-    // return updatedContent;
-    return _.updateDom(this).find('#content').strapdownToc(settings.toc);
-  };
-
-  $.strapdown = function (options) {
-    var $markdownEl = $('xmp,textarea').eq(0);
-
-    // TODO update options instead: default < html < options param
-    // Table of contents
-    if ($markdownEl.attr('toc')) {
-      // Extra features: back to top
-      var tocTopLink = $markdownEl.attr('toc-top-link');
-      if (tocTopLink) {
-        window.strapdownToc = {
-          includeBackToTopLink: true
-        };
-
-        if (tocTopLink !== '1' && tocTopLink !== 'true') {
-          window.strapdownToc.backToTopLinkLabel = tocTopLink;
-        }
-      }
+    if (this.get(0) === document || this.get(0) === document.body) {
+      target = $('xmp,textarea').eq(0);
+      _.updateHead();
+      _.updateNavbar();
+    } else {
+      target = this;
     }
 
-    _.updateHead(options);
+    var settings = _.normalizeOptions(_.extractAttributeOptions(target), options);
+    var updatedDom = _.updateBody(target);
 
-    $markdownEl.strapdown(options);
+    if (settings.toc) {
+      settings.toc.insertionPoint = $(settings.toc.insertionPoint);
+      $.fn.strapdown.toc(updatedDom.find('#content'), settings.toc);
+    }
 
-    return this;
+    return updatedDom;
   };
 
-  $.strapdown.defaults = {
-    header: {
-      title: 'Strapdown'
-    },
-    toc: {
-      navbar: '#headline', // name? appendTo? only put the selector?
-      selector: '.toc'
-    },
+  $.fn.strapdown.importCss = _.importCss;
+
+  $.fn.strapdown.defaults = {
+    toc: false
+    // toc: {
+    //   navbar: '#headline', // name? appendTo? only put the selector?
+    //   selector: '.toc'
+    // },
   };
 
+
+
+  // @ifdef DEBUG
   // For testing purposes
-  $.strapdown._internals = _;
+  $.fn.strapdown._internals = _;
+  // @endif
 
 }( jQuery ));
 

@@ -58,7 +58,7 @@
       return closingTags;
     },
 
-    makeToc: function  (contentEl) {
+    makeToc: function  (contentEl, settings) {
 
       var headerLevels = 'h1,h2,h3',
           titleMap = {},
@@ -88,8 +88,8 @@
 
       tocString += _.generateClosingTags(prevLevel, 1);
 
-      if (_.tocData && _.tocData.includeBackToTopLink) {
-        var label = _.tocData.backToTopLinkLabel || 'Back to top';
+      if (settings.topLink) {
+        var label = settings.topLink;
         tocString += '<li><a href="#" id="backTop" onlick="' +
                      'jQuery(\'html,body\').animate({scrollTop:0},0);' +
                      '" >' + label + '</a></li>';
@@ -99,11 +99,8 @@
     }
   };
 
-  $.fn.strapdownToc = function (options) {
-    var contentEl    = this, // $('#content')
-        navbarEl     = $(options.navbar),
-        // navbarEl     = options.navbar, // $('#headline'),
-        pageTitle    = navbarEl.text(),
+  $.fn.strapdown.toc = function (contentEl, settings) {
+    var pageTitle    = settings.insertionPoint.text(),
         spiedEl = $('body'),
         newNavbarEl  = $('' +
           '<div class="navbar-header">' +
@@ -116,13 +113,18 @@
         navbarTocEl  = newNavbarEl.eq(1) // TODO try to split the declaration, then merge with newNavbarEl = newNavbarEl.add(navbarTocEl)
         ;
 
+    console.log(settings.insertionPoint);
+
+    if (!settings.insertionPoint.length) { // TODO better error handling.
+      throw 'insertion point error';
+    }
 
     navbarTocEl.append($('<ul/>', {
       'class': 'nav navbar-nav',
-      'html': _.makeToc(contentEl)
+      'html': _.makeToc(contentEl, settings)
     }));
 
-    $(navbarEl).parent().replaceWith(newNavbarEl);
+    $(settings.insertionPoint).parent().replaceWith(newNavbarEl);
 
     // The spiedEl.scrollspy() form doesn't seem to work, so I'm adding the attributes instead
     // (the pure js form works but doesn't put the first link as active. You have to scroll first.)
@@ -136,7 +138,9 @@
     return this;
   };
 
+  // @ifdef DEBUG
   // For testing purposes
-  $.fn.strapdownToc._internals = _;
+  $.fn.strapdown.toc._internals = _;
+  // @endif
 
 }( jQuery ));
