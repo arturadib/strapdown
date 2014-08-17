@@ -2,11 +2,6 @@
 (function( $ ) {
   'use strict';
 
-  var acceptedAttributes  = {
-    'toc' : 'toc',
-    'toc-top-link' : 'tocTopLink'
-  };
-
   var _ = {
     getStrapdownOrigin: function () {
       var scriptEls = document.getElementsByTagName('script'),
@@ -28,25 +23,32 @@
       $(document.head).append($('<link/>', {href: _.getStrapdownOrigin() + '/strapdown.css', rel: 'stylesheet'}));
     },
 
-    updateHead: function (options) {
+    updateHead: function () {
       // Use <meta> viewport so that Bootstrap is actually responsive on mobile
       $(document.head).prepend($('<meta name="viewport" content="width=device-width, initial-scale=1">')); // why was it 'max/min width = 1'?
       _.importCss();
     },
 
-    updateNavbar: function () {
-      var titleEl = document.getElementsByTagName('title')[0],
-          navbarEl = $('.navbar').get(0);
-        // Insert navbar if there's none
-      if (!navbarEl && titleEl) {
-        var newNode = document.createElement('div');
-        newNode.className = 'navbar navbar-inverse navbar-fixed-top';
-        newNode.innerHTML = '<div class="container"> <div class="navbar-header">' +
-                              '<div id="headline" class="navbar-brand">' + titleEl.innerHTML +'</div> ' +
-                            '</div> </div>';
+    createNavbar: function (settings) {
+      if (!settings.navbar) {return;}
+      var navbarCollapseBtn = ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
+                              '   Table of Contents' +
+                              ' </button>',
+          tocInsertionPoint = '<div class="toc collapse navbar-collapse"></div>',
+          navbarTitle       = '<div id="headline" class="navbar-brand">' + settings.navbar.title +'</div>'
+          ;
 
-        document.body.insertBefore(newNode, document.body.firstChild);
+      var newNode = document.createElement('div');
+      newNode.className = 'navbar navbar-inverse navbar-fixed-top';
+      newNode.innerHTML = '<div class="container"> <div class="navbar-header">' +
+                          (settings.toc ? navbarCollapseBtn + navbarTitle + tocInsertionPoint : navbarTitle) +
+                          '</div> </div>';
+
+      if (settings.toc) {
+        settings.toc.insertionPoint = '.toc';
       }
+
+      document.body.insertBefore(newNode, document.body.firstChild);
     },
 
     updateBody: function (contentEl) {
@@ -106,8 +108,8 @@
     normalizeOptions: function (attributeOptions, jsOptions) {
       var settings =  $.extend({}, $.fn.strapdown.defaults, attributeOptions, jsOptions);
 
-      if (settings.toc) {
-        settings.toc.insertionPoint = settings.toc.insertionPoint || '#headline';
+      if (settings.navbar) {
+        settings.navbar.title = settings.navbar.title || ($('title').length ? $('title').get(0).innerHTML : 'Strapdown');
       }
 
       return settings;
@@ -120,8 +122,6 @@
 
     if (this.get(0) === document || this.get(0) === document.body) {
       target = $('xmp,textarea').eq(0);
-      _.updateHead();
-      _.updateNavbar();
     } else {
       target = this;
     }
@@ -129,9 +129,16 @@
     var settings = _.normalizeOptions(_.extractAttributeOptions(target), options);
     var updatedDom = _.updateBody(target);
 
+    if (settings.importCss) {
+      _.updateHead();
+    }
+
+    if (settings.navbar) {
+      _.createNavbar(settings);
+    }
+
     if (settings.toc) {
-      settings.toc.insertionPoint = $(settings.toc.insertionPoint);
-      $.fn.strapdown.toc(updatedDom.find('#content'), settings.toc);
+      $.fn.strapdown.toc(updatedDom.find('#content'), settings);
     }
 
     return updatedDom;
@@ -140,14 +147,11 @@
   $.fn.strapdown.importCss = _.importCss;
 
   $.fn.strapdown.defaults = {
+    importCss: true,
+    navbar: {
+    },
     toc: false
-    // toc: {
-    //   navbar: '#headline', // name? appendTo? only put the selector?
-    //   selector: '.toc'
-    // },
   };
-
-
 
   // @ifdef DEBUG
   // For testing purposes
