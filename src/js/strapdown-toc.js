@@ -60,8 +60,8 @@
 
       tocString += _.generateClosingTags(prevLevel, 1);
 
-      if (settings.topLink) {
-        var label = settings.topLink;
+      if (settings.toc.topLink) {
+        var label = settings.toc.topLink;
         tocString += '<li><a href="#" id="backTop" onlick="' +
                      'jQuery(\'html,body\').animate({scrollTop:0},0);' +
                      '" >' + label + '</a></li>';
@@ -72,33 +72,39 @@
   };
 
   $.fn.strapdown.toc = function (contentEl, settings) {
-    var navbarTocEl = $(settings.toc.insertionPoint);
+    var navbarTocEl = $(settings.toc.dest);
 
-    if (! navbarTocEl.length) {
+    if (!contentEl.length) {
+      console.warn('No content available to generate the table of content from. Aborting.');
+      return this;
+    } else if (! navbarTocEl.length ) {
       console.warn('Unable to find the insertion point for the table of content. Aborting.');
       return this;
+    } else {
+      navbarTocEl.append($('<ul/>', {
+        'class': settings.toc.scrollspy ? 'nav navbar-nav' : '',
+        'html': _.makeToc(contentEl, settings)
+      }));
+
+      if (settings.toc.scrollspy) {
+        if ($.fn.scrollspy) {
+          setTimeout(function () {
+            $('body').scrollspy({
+              target: settings.toc.dest,
+              offset: settings.toc.scrollspyOffset
+            });
+          }, 500);
+        } else {
+          console.warn('boostrap scrollspy is not available.');
+        }
+      }
     }
-
-    navbarTocEl.append($('<ul/>', {
-      'class': 'nav navbar-nav',
-      'html': _.makeToc(contentEl, settings)
-    }));
-
-    contentEl.addClass('col-sm-10 col-sm-offset-2');
-
-    setTimeout(function () {
-      $('body').scrollspy({
-        target: settings.toc.insertionPoint,
-        offset: 70 /* Height of the navbar + standard offset */
-      });
-    }, 500);
 
     return this;
   };
 
   // @ifdef DEBUG
-  // For testing purposes
-  $.fn.strapdown.toc._internals = _;
+  $.fn.strapdown.toc._internals = _;   // For testing purposes
   // @endif
 
 }( jQuery ));

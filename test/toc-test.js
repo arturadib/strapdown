@@ -50,11 +50,11 @@ QUnit.test( 'Internals - extractAttributeOptions', function( assert ) {
 QUnit.test( 'Internals - normalizeOptions', function( assert ) {
 	var actualOutput, expectedOutput;
 
-	expectedOutput = {importCss: true, toc: false, navbar: false};
-	actualOutput = $.fn.strapdown._internals.normalizeOptions({toc: {topLink: 'no this'}}, {toc: false, navbar: false});
+	expectedOutput = {importCss: false, toc: false, navbar: false};
+	actualOutput = $.fn.strapdown._internals.normalizeOptions({toc: {topLink: 'no this'}}, {toc: false});
 	assert.deepEqual(actualOutput, expectedOutput);
 
-	expectedOutput = {importCss: true, toc: {topLink: 'this instead'}, navbar: {title: 'something'}};
+	expectedOutput = {importCss: false, toc: {topLink: 'this instead'}, navbar: {title: 'something'}};
 	actualOutput = $.fn.strapdown._internals.normalizeOptions(
 		{toc: {topLink: 'not this'}},
 		{toc: {topLink: 'this instead'}, navbar: {title: 'something'}}

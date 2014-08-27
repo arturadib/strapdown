@@ -1,12 +1,4 @@
 /******************************************************************************
- * Library imports
- *****************************************************************************/
-
-@import (less) 'vendor/bootswatch/lumen/bootstrap.css';
-@import (less) 'vendor/google-code-prettify/bin/prettify.min.css';
-
-
-/******************************************************************************
  * Variables
  *****************************************************************************/
 
@@ -15,7 +7,7 @@
 @list-indent-per-lvl: 15px;
 @max-xs-screen-width: 767px;
 @toc-width: 13.5%; /* based on col-sm-2 (16.67%), but a bit smaller to leave
-	              * some space to the content*/
+	                  * some space to the content*/
 @toc-link-color: #158CBA; /* Default link color (when not inverse) */
 
 
@@ -30,10 +22,6 @@ body {
   padding-bottom: 40px;
   font-size: 15px;
   line-height: 150%;
-}
-
-xmp, textarea {
-  display: none;
 }
 
 h1,h2,h3,h4 {
@@ -60,4 +48,4 @@ img {
  * Other files to include
  *****************************************************************************/
 
-@import 'src/strapdown-toc.less';
+@import 'strapdown-toc.less';

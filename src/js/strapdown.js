@@ -15,7 +15,8 @@
         }
       }
 
-      throw 'Unable to get the strapdown origin';
+      console.warn('Unable to get the strapdown origin. File inclusion will probably fail.');
+      return '';
     },
 
     importCss: function () {
@@ -45,42 +46,43 @@
                           '</div> </div>';
 
       if (settings.toc) {
-        settings.toc.insertionPoint = '.toc';
+        settings.toc.dest = '.toc';
       }
 
       document.body.insertBefore(newNode, document.body.firstChild);
     },
 
-    updateBody: function (contentEl) {
-      if (!marked) {
-        throw 'Marked not found. Unable to proceed further.';
-      }
-
+    updateBody: function (contentEl, settings) {
       var markdown = contentEl.text(),
-          newContentEl = $('<div class="container"><div id="content"></div></div>')
+          newContentEl = (settings.dest ? $(settings.dest) : null)
           ;
 
-      contentEl.replaceWith(newContentEl);
+      if (! newContentEl || ! newContentEl.length) {
+        newContentEl = $('<div id="content"></div>');
+        contentEl.replaceWith($('<div></div>', {
+          'class': 'container',
+          'html': newContentEl
+        }));
+      }
 
       // Generate Markdown
-      var html = marked(markdown);
-      document.getElementById('content').innerHTML = html;
+      newContentEl.html(marked(markdown));
 
       // Prettify
       if (prettyPrint) {
-        $('code').each(function () {
+        newContentEl.find('code').each(function () {
           this.className = 'prettyprint lang-' + this.className;
         });
         prettyPrint();
       }
 
       // Style tables
-      $('table').each(function () {
+      newContentEl.find('table').each(function () {
         this.className = 'table table-striped table-bordered';
       });
 
       // Make the images responsive
-      $('img').each(function () {
+      newContentEl.find('img').each(function () {
         this.className = 'img-responsive';
       });
 
@@ -113,43 +115,55 @@
       }
 
       return settings;
+    },
+
+    mainProcess: function (caller, options) {
+      if (!marked) {
+        console.warn('Marked not found. Unable to proceed further.');
+        return;
+      }
+
+      var target;
+
+      if (caller.get(0) === document || caller.get(0) === document.body) {
+        target = $('xmp,textarea').eq(0);
+      } else {
+        target = caller;
+      }
+
+      var settings = _.normalizeOptions(_.extractAttributeOptions(target), options);
+      var updatedDom = _.updateBody(target, settings);
+
+      if (settings.importCss) {
+        _.updateHead();
+      }
+
+      if (settings.navbar) {
+        _.createNavbar(settings);
+      }
+
+      if (settings.toc) {
+        $.fn.strapdown.toc(updatedDom, settings);
+      }
+
+      return updatedDom;
     }
 
   };
 
-  $.fn.strapdown = function (options) {
-    var target;
-
-    if (this.get(0) === document || this.get(0) === document.body) {
-      target = $('xmp,textarea').eq(0);
+  $.fn.strapdown = function (methodOrOptions, optionsIfMethod) {
+    if (methodOrOptions === 'toc') {
+      return $.fn.strapdown.toc(this, optionsIfMethod);
     } else {
-      target = this;
+      return _.mainProcess(this, methodOrOptions);
     }
-
-    var settings = _.normalizeOptions(_.extractAttributeOptions(target), options);
-    var updatedDom = _.updateBody(target);
-
-    if (settings.importCss) {
-      _.updateHead();
-    }
-
-    if (settings.navbar) {
-      _.createNavbar(settings);
-    }
-
-    if (settings.toc) {
-      $.fn.strapdown.toc(updatedDom.find('#content'), settings);
-    }
-
-    return updatedDom;
   };
 
   $.fn.strapdown.importCss = _.importCss;
 
   $.fn.strapdown.defaults = {
-    importCss: true,
-    navbar: {
-    },
+    importCss: false,
+    navbar: false,
     toc: false
   };
 

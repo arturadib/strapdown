@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<title>jqStrapdown - Syntax examples</title>
+<head>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<style>
+	.body {
+		position: relative;
+	}
+	.limitedHeight {
+		max-height: 200px;
+		overflow-y: scroll;
+	}
+	.navbar-nav,
+	.toc li {
+		float: none !important;
+	}
+	.toc a {
+		background-color: transparent !important;
+	}
+	.toc {
+		position: fixed;
+		bottom: 10px;
+	}
+	.toc .active>a {
+		font-weight: bold;
+	}
+	</style>
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>Raw Markdown</h2>
+
+			<xmp id="markdownContent">
+## Basic formatting
+
+Paragraphs can be written like so. A paragraph is
+the basic block of Markdown. A paragraph is what
+text will turn into when there is no reason it should
+become anything else.
+
+Paragraphs must be separated by a blank line. Basic
+formatting of *italics* and **bold** is supported.
+This *can be **nested** like* so.
+
+## Lists
+
+### Ordered list
+
+1. Item 1
+2. A second item
+3. Number 3
+4. Ⅳ
+
+*Note: the fourth item uses the Unicode character
+for Roman numeral four.*
+
+### Unordered list
+
+* An item
+* Another item
+* Yet another item
+* And there's more...
+
+## Paragraph modifiers
+
+### Code block
+
+```
+Code blocks are very useful for developers and other
+people who look at code or other things that are written
+in plain text. As you can see, it uses a fixed-width font.
+```
+
+You can also make `inline code` to add code into other things.
+
+			</xmp>
+			<div class="toc"></div>
+		</div>
+		<div class="col-sm-6">
+			<div>
+				<h3>Output</h3>
+				<button class="btn" id="btn1">Process markdown</button>
+				<button class="btn" id="btn2" disabled="disabled">Add table of contents</button>
+				<div id="markdownDestination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="vendor/jquery.min.js"></script>
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/prettify.min.js"></script>
+<script src="vendor/scrollspy.js"></script>
+
+<script src="../v/0.4/jquery.strapdown.js"></script>
+
+
+<script type="text/javascript">
+/* global $*/
+$(function () {
+	'use strict';
+
+	var processedContent = null;
+
+	$('#btn1').click(function () {
+		processedContent = $('#markdownContent').strapdown({
+			// importCss: true,
+			navbar: false,
+			dest: '#markdownDestination'
+		});
+		$('#btn2').prop('disabled', false);
+		$('#btn1').prop('disabled', true);
+		$('#markdownContent').addClass('limitedHeight');
+	});
+
+	$('#btn2').click(function () {
+		processedContent.strapdown('toc', {toc: {
+			dest: '.toc',
+			scrollspy: {
+				offset: 80
+			}
+		}});
+		// processedContent.scrollspy({target: '.toc'});
+		$('body').scrollspy({target: '.toc'});
+		$('#btn2').prop('disabled', true);
+	});
+
+	$('body').on('activate.bs.scrollspy', function () {
+	  	console.log(arguments);
+	});
+
+	$('.toc').on('activate.bs.scrollspy', function () {
+	  	console.log(2, arguments);
+	});
+});
+</script>
+</body>
+</html>
+
