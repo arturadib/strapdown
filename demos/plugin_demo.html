@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
-<title>jqStrapdown - Syntax examples</title>
+<title>Strapdown - Syntax examples</title>
 <head>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="vendor/bootstrap.min.css">
 	<style>
 	.body {
 		position: relative;
@@ -11,8 +12,10 @@
 		max-height: 200px;
 		overflow-y: scroll;
 	}
+	/* Override of the navbar style, and other visual stuff */
 	.navbar-nav,
 	.toc li {
+		list-style: none;
 		float: none !important;
 	}
 	.toc a {
@@ -24,6 +27,14 @@
 	}
 	.toc .active>a {
 		font-weight: bold;
+	}
+
+	/* Toc collapse when not active */
+	.toc>ul>li.active ul {
+		display: block;
+	}
+	.toc>ul>li ul {
+		display:none;
 	}
 	</style>
 </head>
@@ -77,6 +88,86 @@ in plain text. As you can see, it uses a fixed-width font.
 
 You can also make `inline code` to add code into other things.
 
+
+### Quote
+
+> Here is a quote. What this is should be self explanatory.
+> Quotes are automatically indented when they are used.
+
+## Headings
+
+There are six levels of headings. They correspond with the six
+levels of HTML headings. You've probably noticed them already
+in the page. Each level down uses one more hash character.
+
+### Headings *can* also contain **formatting**
+
+### They can even contain `inline code`
+
+Of course, demonstrating what headings look like messes up
+the structure of the page.
+
+I don't recommend using more than three or four levels of headings
+here, because, when your smallest heading isn't too small, and
+your largest heading isn't too big, and you want each size up to
+look noticeably larger and more important, there there are only
+so many sizes that you can use.
+
+## URLs
+
+URLs can be made in a handful of ways:
+
+* A named link to [MarkItDown][3].
+(That's where this example comes from)
+
+* Another named link to
+[Strapdown](http://ndossougbe.github.io/strapdown/)
+
+* Sometimes you just want a URL like
+<http://www.strapdownjs.com/>.
+
+* This is an url to the first title of this page
+[#basic-formatting](#basic-formatting)
+
+## Horizontal rule
+
+A horizontal rule is a line that goes across the
+middle of the page.
+
+---
+
+It's sometimes handy for breaking things up.
+
+## Images
+
+Markdown can also contain images. I'll need to add
+something here sometime.
+
+## Finally
+
+There's actually a lot more to Markdown than this. See the official
+[introduction][4] and [syntax][5] for more information. However, be
+aware that this is not using the official implementation, and this
+might work subtly differently in some of the little things.
+
+For example, tables:
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
+
+See the description for [Github Flavored Markdown][6]
+for more information.
+
+  [1]: http://daringfireball.net/projects/markdown/
+  [2]: http://www.fileformat.info/info/unicode/char/2163/index.htm
+  [3]: http://www.markitdown.net/
+  [4]: http://daringfireball.net/projects/markdown/basics
+  [5]: http://daringfireball.net/projects/markdown/syntax
+  [6]: https://help.github.com/articles/github-flavored-markdown
+
 			</xmp>
 			<div class="toc"></div>
 		</div>
@@ -97,7 +188,7 @@ You can also make `inline code` to add code into other things.
 <script src="vendor/prettify.min.js"></script>
 <script src="vendor/scrollspy.js"></script>
 
-<script src="../v/0.4/jquery.strapdown.js"></script>
+<script src="../dist/jquery.strapdown.min.js"></script>
 
 
 <script type="text/javascript">
@@ -121,6 +212,7 @@ $(function () {
 	$('#btn2').click(function () {
 		processedContent.strapdown('toc', {toc: {
 			dest: '.toc',
+			topLink: 'Back to top',
 			scrollspy: {
 				offset: 80
 			}

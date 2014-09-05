@@ -54,7 +54,10 @@
 				pluginDeps: {
 					expand: true,   // enable dynamic options
 					flatten: true,  // to avoid the creation of subdirectories
-					src: ['<%= pkg.deps %>'],
+					src: [
+						'<%= pkg.deps %>',
+						'vendor/bootstrap/dist/css/bootstrap.min.css'
+					],
 					dest: 'demos/vendor/',
 				}
 			},
@@ -70,14 +73,14 @@
 						'tmp/strapdown-toc.js',
 						'tmp/strapdown-bi.js'
 					],
-					dest: 'v/<%= pkg.shortVers %>/strapdown.js'
+					dest: 'dist/strapdown.js'
 				},
 				plugin: {
 					src: [
 						'tmp/strapdown.js',
 						'tmp/strapdown-toc.js'
 					],
-					dest: 'v/<%= pkg.shortVers %>/jquery.strapdown.js'
+					dest: 'dist/jquery.strapdown.js'
 				}
 			},
 
@@ -89,7 +92,7 @@
 					files: {
 						// in-place minify. This is to make the loading from the html easier, since the filename is the same.
 						'<%= concat.standalone.dest %>': ['<%= concat.standalone.dest %>'],
-						'v/<%= pkg.shortVers %>/jquery.strapdown.min.js': ['<%= concat.plugin.dest %>']
+						'dist/jquery.strapdown.min.js': ['<%= concat.plugin.dest %>']
 					}
 				}
 			},
@@ -124,36 +127,16 @@
 						cleancss: true
 					},
 					files: {
-						'v/<%= pkg.shortVers %>/jquery.strapdown.min.css': 'src/less/strapdown.less',
-						'v/<%= pkg.shortVers %>/strapdown.css': 'src/less/strapdown-bi.less'
+						'dist/jquery.strapdown.min.css': 'src/less/strapdown.less',
+						'dist/strapdown.css': 'src/less/strapdown-bi.less'
 					}
-				}
-			},
-
-			// Used for in-place update of the html files.
-			replace: {
-				index: {
-					src: ['index.html'],
-					overwrite: true,
-					replacements: [{
-						from: /(<!--\s*grunt:update-version-start\s*-->\s*)((?:.|\s)*?)(\s*<!--\s*grunt:update-version-end\s*-->)/,
-						to: '$1<script src="v/<%= pkg.shortVers %>/strapdown.js"></script>$3'
-					}]
-				},
-				demos: {
-					src: ['demos/*.html'],
-					overwrite: true,
-					replacements: [{
-						from: /(<!--\s*grunt:update-version-start\s*-->\s*)((?:.|\s)*?)(\s*<!--\s*grunt:update-version-end\s*-->)/,
-						to: '$1<script src="../v/<%= pkg.shortVers %>/strapdown.js"></script>$3'
-					}]
 				}
 			},
 
 			clean: {
 				files: {
 					src: [
-						'v/<%= pkg.shortVers %>/',
+						'dist/',
 						'demos/vendor/',
 						'tmp/'
 					]
@@ -164,11 +147,10 @@
 		// Renamed to allow running clean and a first build before doing the deltas
 		grunt.renameTask( 'watch', 'delta' );
 
-		grunt.registerTask('test',           ['jshint', 'qunit']);
+		grunt.registerTask('test',           ['jshint'/*, 'qunit'*/]);
 		grunt.registerTask('build',          ['concat', 'less']);
-		grunt.registerTask('default',        ['clean', 'test', 'copy:pluginDeps', 'preprocess:release', 'build', 'uglify']);
-		grunt.registerTask('watch',          ['clean', 'test', 'copy:pluginDeps', 'preprocess:dev', 'build', 'delta']);
-		grunt.registerTask('update-version', ['replace']);
+		grunt.registerTask('default',        ['clean', 'copy:pluginDeps', 'test', 'preprocess:release', 'build', 'uglify']);
+		grunt.registerTask('watch',          ['clean', 'copy:pluginDeps', 'test', 'preprocess:dev', 'build', 'delta']);
 
 	};
 })();

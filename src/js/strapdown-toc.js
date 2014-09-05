@@ -74,28 +74,31 @@
   $.fn.strapdown.toc = function (contentEl, settings) {
     var navbarTocEl = $(settings.toc.dest);
 
-    if (!contentEl.length) {
-      console.warn('No content available to generate the table of content from. Aborting.');
-      return this;
-    } else if (! navbarTocEl.length ) {
-      console.warn('Unable to find the insertion point for the table of content. Aborting.');
-      return this;
-    } else {
-      navbarTocEl.append($('<ul/>', {
-        'class': settings.toc.scrollspy ? 'nav navbar-nav' : '',
-        'html': _.makeToc(contentEl, settings)
-      }));
+    if (settings && settings.toc && !settings.toc.disabled) {
 
-      if (settings.toc.scrollspy) {
-        if ($.fn.scrollspy) {
-          setTimeout(function () {
-            $('body').scrollspy({
-              target: settings.toc.dest,
-              offset: settings.toc.scrollspyOffset
-            });
-          }, 500);
-        } else {
-          console.warn('boostrap scrollspy is not available.');
+      if (!contentEl.length) {
+        console.warn('No content available to generate the table of content from. Aborting.');
+        return this;
+      } else if (! navbarTocEl.length ) {
+        console.warn('Unable to find the insertion point for the table of content. Aborting.');
+        return this;
+      } else {
+        navbarTocEl.append($('<ul/>', {
+          'class': settings.toc.scrollspy ? 'nav navbar-nav' : '',
+          'html': _.makeToc(contentEl, settings)
+        }));
+
+        if (settings.toc.scrollspy) {
+          if ($.fn.scrollspy) {
+            setTimeout(function () {
+              $('body').scrollspy({
+                target: settings.toc.dest,
+                offset: settings.toc.scrollspyOffset
+              });
+            }, 500);
+          } else {
+            console.warn('boostrap scrollspy is not available.');
+          }
         }
       }
     }

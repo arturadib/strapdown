@@ -101,14 +101,21 @@
             case 'toc-top-link':
               htmlOptions.toc.topLink = el.value ? el.value : 'Back to top';
               break;
+            case 'toc-disabled':
+              htmlOptions.toc.disabled = true;
+              break;
           }
         }
       });
+
       return htmlOptions;
     },
 
     normalizeOptions: function (attributeOptions, jsOptions) {
-      var settings =  $.extend({}, $.fn.strapdown.defaults, attributeOptions, jsOptions);
+      var settings =  $.extend(
+        true, /* deep merge */
+        {}, /* target */
+        $.fn.strapdown.defaults, attributeOptions, jsOptions);
 
       if (settings.navbar) {
         settings.navbar.title = settings.navbar.title || ($('title').length ? $('title').get(0).innerHTML : 'Strapdown');
@@ -142,7 +149,7 @@
         _.createNavbar(settings);
       }
 
-      if (settings.toc) {
+      if (settings.toc && !settings.toc.disabled) {
         $.fn.strapdown.toc(updatedDom, settings);
       }
 

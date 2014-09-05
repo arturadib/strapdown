@@ -57,7 +57,7 @@
           newContentEl = (settings.dest ? $(settings.dest) : null)
           ;
 
-      if (! newContentEl) {
+      if (! newContentEl || ! newContentEl.length) {
         newContentEl = $('<div id="content"></div>');
         contentEl.replaceWith($('<div></div>', {
           'class': 'container',
@@ -101,14 +101,21 @@
             case 'toc-top-link':
               htmlOptions.toc.topLink = el.value ? el.value : 'Back to top';
               break;
+            case 'toc-disabled':
+              htmlOptions.toc.disabled = true;
+              break;
           }
         }
       });
+
       return htmlOptions;
     },
 
     normalizeOptions: function (attributeOptions, jsOptions) {
-      var settings =  $.extend({}, $.fn.strapdown.defaults, attributeOptions, jsOptions);
+      var settings =  $.extend(
+        true, /* deep merge */
+        {}, /* target */
+        $.fn.strapdown.defaults, attributeOptions, jsOptions);
 
       if (settings.navbar) {
         settings.navbar.title = settings.navbar.title || ($('title').length ? $('title').get(0).innerHTML : 'Strapdown');
@@ -142,7 +149,7 @@
         _.createNavbar(settings);
       }
 
-      if (settings.toc) {
+      if (settings.toc && !settings.toc.disabled) {
         $.fn.strapdown.toc(updatedDom, settings);
       }
 
@@ -167,8 +174,6 @@
     toc: false
   };
 
-  // For testing purposes
-  $.fn.strapdown._internals = _;
 }( jQuery ));
 
 ;
@@ -248,28 +253,31 @@
   $.fn.strapdown.toc = function (contentEl, settings) {
     var navbarTocEl = $(settings.toc.dest);
 
-    if (!contentEl.length) {
-      console.warn('No content available to generate the table of content from. Aborting.');
-      return this;
-    } else if (! navbarTocEl.length ) {
-      console.warn('Unable to find the insertion point for the table of content. Aborting.');
-      return this;
-    } else {
-      navbarTocEl.append($('<ul/>', {
-        'class': settings.toc.scrollspy ? 'nav navbar-nav' : '',
-        'html': _.makeToc(contentEl, settings)
-      }));
+    if (settings && settings.toc && !settings.toc.disabled) {
 
-      if (settings.toc.scrollspy) {
-        if ($.fn.scrollspy) {
-          setTimeout(function () {
-            $('body').scrollspy({
-              target: settings.toc.dest,
-              offset: settings.toc.scrollspyOffset
-            });
-          }, 500);
-        } else {
-          console.warn('boostrap scrollspy is not available.');
+      if (!contentEl.length) {
+        console.warn('No content available to generate the table of content from. Aborting.');
+        return this;
+      } else if (! navbarTocEl.length ) {
+        console.warn('Unable to find the insertion point for the table of content. Aborting.');
+        return this;
+      } else {
+        navbarTocEl.append($('<ul/>', {
+          'class': settings.toc.scrollspy ? 'nav navbar-nav' : '',
+          'html': _.makeToc(contentEl, settings)
+        }));
+
+        if (settings.toc.scrollspy) {
+          if ($.fn.scrollspy) {
+            setTimeout(function () {
+              $('body').scrollspy({
+                target: settings.toc.dest,
+                offset: settings.toc.scrollspyOffset
+              });
+            }, 500);
+          } else {
+            console.warn('boostrap scrollspy is not available.');
+          }
         }
       }
     }
@@ -277,5 +285,4 @@
     return this;
   };
 
-  $.fn.strapdown.toc._internals = _;   // For testing purposes
 }( jQuery ));
