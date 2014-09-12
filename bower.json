@@ -18,6 +18,7 @@
     "marked": "git://github.com/chjj/marked.git#master",
     "prettify": "*",
     "bootswatch": "~3.2.0+1",
-    "google-code-prettify": "~1.0.2"
+    "google-code-prettify": "~1.0.2",
+    "qunit": "~1.15.0"
   }
 }

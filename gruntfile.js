@@ -59,6 +59,15 @@
 						'vendor/bootstrap/dist/css/bootstrap.min.css'
 					],
 					dest: 'demos/vendor/',
+				},
+				testDeps: {
+					expand: true,   // enable dynamic options
+					flatten: true,  // to avoid the creation of subdirectories
+					src: [
+						'vendor/qunit/qunit/qunit.js',
+						'vendor/qunit/qunit/qunit.css'
+					],
+					dest: 'test/vendor/',
 				}
 			},
 
@@ -102,7 +111,7 @@
 			},
 
 			jshint: {
-				files: ['gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+				files: ['gruntfile.js', 'src/**/*.js', 'test/**/*.js', '!**/vendor/**/*.js'],
 				options: {
 					globals: {
 						console: true,
@@ -147,10 +156,10 @@
 		// Renamed to allow running clean and a first build before doing the deltas
 		grunt.renameTask( 'watch', 'delta' );
 
-		grunt.registerTask('test',           ['jshint'/*, 'qunit'*/]);
+		grunt.registerTask('test',           ['jshint', 'qunit']);
 		grunt.registerTask('build',          ['concat', 'less']);
-		grunt.registerTask('default',        ['clean', 'copy:pluginDeps', 'test', 'preprocess:release', 'build', 'uglify']);
-		grunt.registerTask('watch',          ['clean', 'copy:pluginDeps', 'test', 'preprocess:dev', 'build', 'delta']);
+		grunt.registerTask('default',        ['clean', 'copy', 'test', 'preprocess:release', 'build', 'uglify']);
+		grunt.registerTask('watch',          ['clean', 'copy', 'test', 'preprocess:dev', 'build', 'delta']);
 
 	};
 })();

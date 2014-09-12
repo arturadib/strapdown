@@ -1,8 +1,10 @@
 # Strapdown.js
 
-Strapdown.js makes it embarrassingly simple to create elegant Markdown documents. No server-side compilation required. 
+Strapdown.js makes it embarrassingly simple to create elegant Markdown documents. No server-side compilation required.  
 
 This is a fork of the awesome project at http://strapdownjs.com
+
+This fork adds auto generated table of contents and can be used as a jQuery plugin.
 
 For more, please see:
 
@@ -21,7 +23,6 @@ $ grunt
 Other available commands are:
 
 - `grunt watch` - refreshes the output files on where are changed.
-- `grunt update-version` - updates the target folder (i.e. `v/0.4`  in the html files)
 - `grunt test` - only runs the tests
 
 Bug fixes should go in the latest version - no need to bump it. New features or anything that changes the old behavior should go into a bumped version (update **version** in `package.json`)
