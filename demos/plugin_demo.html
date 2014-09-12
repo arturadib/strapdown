@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<title>Strapdown - Syntax examples</title>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="vendor/bootstrap.min.css">
+	<style>
+	.body {
+		position: relative;
+	}
+	.limitedHeight {
+		max-height: 200px;
+		overflow-y: scroll;
+	}
+	/* Override of the navbar style, and other visual stuff */
+	.navbar-nav,
+	.toc li {
+		list-style: none;
+		float: none !important;
+	}
+	.toc a {
+		background-color: transparent !important;
+	}
+	.toc {
+		position: fixed;
+		bottom: 10px;
+	}
+	.toc .active>a {
+		font-weight: bold;
+	}
+
+	/* Toc collapse when not active */
+	.toc>ul>li.active ul {
+		display: block;
+	}
+	.toc>ul>li ul {
+		display:none;
+	}
+	</style>
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>Raw Markdown</h2>
+
+			<xmp id="markdownContent">
+## Basic formatting
+
+Paragraphs can be written like so. A paragraph is
+the basic block of Markdown. A paragraph is what
+text will turn into when there is no reason it should
+become anything else.
+
+Paragraphs must be separated by a blank line. Basic
+formatting of *italics* and **bold** is supported.
+This *can be **nested** like* so.
+
+## Lists
+
+### Ordered list
+
+1. Item 1
+2. A second item
+3. Number 3
+4. Ⅳ
+
+*Note: the fourth item uses the Unicode character
+for Roman numeral four.*
+
+### Unordered list
+
+* An item
+* Another item
+* Yet another item
+* And there's more...
+
+## Paragraph modifiers
+
+### Code block
+
+```
+Code blocks are very useful for developers and other
+people who look at code or other things that are written
+in plain text. As you can see, it uses a fixed-width font.
+```
+
+You can also make `inline code` to add code into other things.
+
+
+### Quote
+
+> Here is a quote. What this is should be self explanatory.
+> Quotes are automatically indented when they are used.
+
+## Headings
+
+There are six levels of headings. They correspond with the six
+levels of HTML headings. You've probably noticed them already
+in the page. Each level down uses one more hash character.
+
+### Headings *can* also contain **formatting**
+
+### They can even contain `inline code`
+
+Of course, demonstrating what headings look like messes up
+the structure of the page.
+
+I don't recommend using more than three or four levels of headings
+here, because, when your smallest heading isn't too small, and
+your largest heading isn't too big, and you want each size up to
+look noticeably larger and more important, there there are only
+so many sizes that you can use.
+
+## URLs
+
+URLs can be made in a handful of ways:
+
+* A named link to [MarkItDown][3].
+(That's where this example comes from)
+
+* Another named link to
+[Strapdown](http://ndossougbe.github.io/strapdown/)
+
+* Sometimes you just want a URL like
+<http://www.strapdownjs.com/>.
+
+* This is an url to the first title of this page
+[#basic-formatting](#basic-formatting)
+
+## Horizontal rule
+
+A horizontal rule is a line that goes across the
+middle of the page.
+
+---
+
+It's sometimes handy for breaking things up.
+
+## Images
+
+Markdown can also contain images. I'll need to add
+something here sometime.
+
+## Finally
+
+There's actually a lot more to Markdown than this. See the official
+[introduction][4] and [syntax][5] for more information. However, be
+aware that this is not using the official implementation, and this
+might work subtly differently in some of the little things.
+
+For example, tables:
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
+
+See the description for [Github Flavored Markdown][6]
+for more information.
+
+  [1]: http://daringfireball.net/projects/markdown/
+  [2]: http://www.fileformat.info/info/unicode/char/2163/index.htm
+  [3]: http://www.markitdown.net/
+  [4]: http://daringfireball.net/projects/markdown/basics
+  [5]: http://daringfireball.net/projects/markdown/syntax
+  [6]: https://help.github.com/articles/github-flavored-markdown
+
+			</xmp>
+			<div class="toc"></div>
+		</div>
+		<div class="col-sm-6">
+			<div>
+				<h3>Output</h3>
+				<button class="btn" id="btn1">Process markdown</button>
+				<button class="btn" id="btn2" disabled="disabled">Add table of contents</button>
+				<div id="markdownDestination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="vendor/jquery.min.js"></script>
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/prettify.min.js"></script>
+<script src="vendor/scrollspy.js"></script>
+
+<script src="../dist/jquery.strapdown.min.js"></script>
+
+
+<script type="text/javascript">
+/* global $*/
+$(function () {
+	'use strict';
+
+	var processedContent = null;
+
+	$('#btn1').click(function () {
+		processedContent = $('#markdownContent').strapdown({
+			// importCss: true,
+			navbar: false,
+			dest: '#markdownDestination'
+		});
+		$('#btn2').prop('disabled', false);
+		$('#btn1').prop('disabled', true);
+		$('#markdownContent').addClass('limitedHeight');
+	});
+
+	$('#btn2').click(function () {
+		processedContent.strapdown('toc', {toc: {
+			dest: '.toc',
+			topLink: 'Back to top',
+			scrollspy: {
+				offset: 80
+			}
+		}});
+		// processedContent.scrollspy({target: '.toc'});
+		$('body').scrollspy({target: '.toc'});
+		$('#btn2').prop('disabled', true);
+	});
+
+	$('body').on('activate.bs.scrollspy', function () {
+	  	console.log(arguments);
+	});
+
+	$('.toc').on('activate.bs.scrollspy', function () {
+	  	console.log(2, arguments);
+	});
+});
+</script>
+</body>
+</html>
+

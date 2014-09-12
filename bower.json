@@ -1,0 +1,24 @@
+{
+  "name": "strapdown",
+  "version": "0.4.1",
+  "homepage": "https://github.com/ndossougbe/strapdown",
+  "authors": [
+    "Nicolas <nicolas.dossougbete@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.2.0",
+    "marked": "git://github.com/chjj/marked.git#master",
+    "prettify": "*",
+    "bootswatch": "~3.2.0+1",
+    "google-code-prettify": "~1.0.2",
+    "qunit": "~1.15.0"
+  }
+}

@@ -1,0 +1,133 @@
+/******************************************************************************
+ * Mixins
+ *****************************************************************************/
+
+.compute-indent (@lvl) {
+	@indent: (@list-base-indent + (@level * @list-indent-per-lvl));
+}
+
+.generate-indent-rules(@maxLevel, @level : 1) when (@level <= @maxLevel) {
+	ul {
+		.compute-indent(@level);
+
+		& > li {
+			padding-left: @list-indent-per-lvl;
+
+			&>a {
+				padding-left: @indent;
+				margin-left: -@indent;
+				font-size: 15px - @level;
+			}
+			&.active>a {
+				font-weight: bold;
+
+				@media screen and (min-width: 768px) {
+					border-left: 2px solid;
+					margin-left: (-2px - @indent);
+				}
+			}
+		}
+		.generate-indent-rules(@maxLevel, (@level + 1))
+	}
+}
+
+/******************************************************************************
+ * Actual styles
+ *****************************************************************************/
+
+body {
+	/* Avoid the navbar hiding content. */
+	padding-top: @navbar-height;
+
+	/* Fix the issue with the navbar hiding the section's title when using links */
+	h1[id], h2[id], h3[id] {
+		padding-top: @navbar-height;
+		margin-top: -@navbar-height;
+	}
+}
+
+
+.toc {
+	/* Hides lower levels when the top level is not selected */
+	li.active>ul {
+		display: block;
+	}
+
+	li>ul {
+		display: none;
+	}
+
+	li>a {
+		display: block;
+		@media screen and (min-width: (@max-xs-screen-width + 1)) {
+			color: @toc-link-color !important;
+		}
+	}
+
+	/* Reset list styles indent */
+	ul {
+		padding-left: 0px;
+		margin-left: 0px;
+		list-style: none outside none;
+
+
+		&>li>a {
+			padding-top: 7px;
+			padding-bottom: 0px;
+		}
+
+		&>li {
+			padding-left:0px;
+		}
+	}
+
+	/* Indenting */
+	.generate-indent-rules(3);
+
+
+	@media screen and (min-width: (@max-xs-screen-width + 1)) {
+		position: absolute;
+		top: @navbar-height;
+		width: 100%;
+		pointer-events:none;
+
+		.nav {
+			width: @toc-width;
+			padding-right: 5px;
+		}
+		ul {
+			pointer-events:auto;
+		}
+
+		li {
+			float: none;
+		}
+	}
+
+	#backTop {
+		padding-top: 20px;
+	}
+
+}
+
+/* Styles in xs mode  */
+@media screen and (max-width: @max-xs-screen-width) {
+	.navbar {
+		 /* instead of transparent, to make the menus readable. */
+		background-color: white;
+	}
+
+	/* applying inverse style to all the links of the navbar */
+	.navbar-inverse .navbar-nav {
+		li>a {
+			color: #999;
+		}
+
+		li>a:hover,
+		li.active>a {
+			color: #333;
+			text-decoration: none;
+		}
+
+	}
+}
