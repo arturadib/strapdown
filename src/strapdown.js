@@ -47,7 +47,7 @@
   // Use <meta> viewport so that Bootstrap is actually responsive on mobile
   var metaEl = document.createElement('meta');
   metaEl.name = 'viewport';
-  metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+  metaEl.content = 'width=device-width, initial-scale=1';
   if (document.head.firstChild)
     document.head.insertBefore(metaEl, document.head.firstChild);
   else
@@ -77,11 +77,6 @@
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
-  var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/themes/bootstrap-responsive.min.css';
-  linkEl.rel = 'stylesheet';
-  document.head.appendChild(linkEl);
-
   //////////////////////////////////////////////////////////////////////
   //
   // <body> stuff
@@ -89,16 +84,16 @@
 
   var markdown = markdownEl.textContent || markdownEl.innerText;
 
-  var newNode = document.createElement('div');
-  newNode.className = 'container';
+  var newNode = document.createElement('main');
+  newNode.className = 'container-fluid';
   newNode.id = 'content';
   document.body.replaceChild(newNode, markdownEl);
 
   // Insert navbar if there's none
-  var newNode = document.createElement('div');
-  newNode.className = 'navbar navbar-fixed-top';
+  var newNode = document.createElement('nav');
+  newNode.className = 'navbar navbar-default navbar-fixed-top';
   if (!navbarEl && titleEl) {
-    newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
+    newNode.innerHTML = '<div class="container"> <div class="navbar-header"> <div id="headline" class="navbar-brand"> </div> </div> </div>';
     document.body.insertBefore(newNode, document.body.firstChild);
     var title = titleEl.innerHTML;
     var headlineEl = document.getElementById('headline');
