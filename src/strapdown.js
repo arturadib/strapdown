@@ -88,7 +88,17 @@
   //
 
   var markdown = markdownEl.textContent || markdownEl.innerText;
-
+  
+  var outter_md_src;
+  if (!markdown) {
+    outter_md_src = markdownEl.getAttribute("src");
+    if (!outter_md_src) {
+      console.warn('Embedded Markdown found in this document is invalid! Visit http://strapdownjs.com/ to learn more.');
+    }
+    
+    markdown = loadOutterMD(outter_md_src);
+  }
+  
   var newNode = document.createElement('div');
   newNode.className = 'container';
   newNode.id = 'content';
@@ -135,3 +145,18 @@
   document.body.style.display = '';
 
 })(window, document);
+
+/*
+ * load Markdown file in synchronized way
+*/
+function loadOutterMD(src){
+  var xhr;
+  if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xhr=new XMLHttpRequest();
+  } else {// code for IE6, IE5
+  xhr=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xhr.open('GET', src, false);
+  xhr.send();
+  return xhr.responseText;
+}
