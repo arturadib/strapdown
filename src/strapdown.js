@@ -82,6 +82,16 @@
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
+  // Custom stylesheet: specified with custom-css tag
+  var customCssEl = document.getElementsByTagName('custom-css')[0];
+  if (customCssEl) {
+      var source = customCssEl.getAttribute('data-href');
+      var linkEl = document.createElement('link');
+      linkEl.href = source;
+      linkEl.rel = 'stylesheet';
+      document.head.appendChild(linkEl)
+  }
+
   //////////////////////////////////////////////////////////////////////
   //
   // <body> stuff
