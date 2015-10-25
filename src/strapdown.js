@@ -120,8 +120,15 @@
 
   // Generate Markdown
   marked.setOptions({
-    highlight : function(code) {
-      return(hljs.highlightAuto(code).value);
+    highlight : function(code,lang) {
+      try {
+        if(typeof lang == "undefined")
+          return null; //return(hljs.highlightAuto(code).value);
+        else
+          return(hljs.highlight(lang,code,true).value);
+      } catch (e) {
+        return null;
+      }
     }
   });
   var html = marked(markdown);
