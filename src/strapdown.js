@@ -129,7 +129,9 @@
       } catch (e) {
         return null;
       }
-    }
+    },
+    langPrefix : "",
+    highlightClass : "hljs"
   });
   var html = marked(markdown);
   document.getElementById('content').innerHTML = html;
