@@ -66,6 +66,10 @@
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
   theme = theme.toLowerCase();
 
+  // Get theme
+  var highlight = markdownEl.getAttribute('highlight') || 'github';
+  highlight = highlight.toLowerCase();
+
   // Stylesheets
   var linkEl = document.createElement('link');
   linkEl.href = originBase + '/themes/'+theme+'.min.css';
