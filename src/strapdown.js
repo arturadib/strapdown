@@ -77,7 +77,7 @@
   document.head.appendChild(linkEl);
 
   var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/themes/github.css';
+  linkEl.href = originBase + '/themes/'+highlight+'.min.css';
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
