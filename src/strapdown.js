@@ -145,7 +145,7 @@
   var tableEls = document.getElementsByTagName('table');
   for (var i=0, ii=tableEls.length; i<ii; i++) {
     var tableEl = tableEls[i];
-    tableEl.className = 'table table-striped table-bordered';
+    tableEl.className = 'table table-bordered';
   }
 
   // All done - show body
