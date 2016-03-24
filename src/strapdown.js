@@ -8,6 +8,7 @@
   document.head = document.getElementsByTagName('head')[0];
 
   if (!('getElementsByClassName' in document)) {
+    console.log("Shims");
     document.getElementsByClassName = function(name) {
       function getElementsByClassName(node, classname) {
         var a = [];
@@ -32,7 +33,6 @@
       navbarEl = document.getElementsByClassName('navbar')[0];
 
   if (!markdownEl) {
-    console.warn('No embedded Markdown found in this document for Strapdown.js to work on! Visit http://strapdownjs.com/ to learn more.');
     return;
   }
 
@@ -47,7 +47,7 @@
   // Use <meta> viewport so that Bootstrap is actually responsive on mobile
   var metaEl = document.createElement('meta');
   metaEl.name = 'viewport';
-  metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+  metaEl.content = 'width=device-width, initial-scale=1';
   if (document.head.firstChild)
     document.head.insertBefore(metaEl, document.head.firstChild);
   else
@@ -66,9 +66,18 @@
   var theme = markdownEl.getAttribute('theme') || 'bootstrap';
   theme = theme.toLowerCase();
 
+  // Get theme
+  var highlight = markdownEl.getAttribute('highlight') || 'github';
+  highlight = highlight.toLowerCase();
+
   // Stylesheets
   var linkEl = document.createElement('link');
   linkEl.href = originBase + '/themes/'+theme+'.min.css';
+  linkEl.rel = 'stylesheet';
+  document.head.appendChild(linkEl);
+
+  var linkEl = document.createElement('link');
+  linkEl.href = originBase + '/themes/'+highlight+'.min.css';
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
@@ -77,10 +86,12 @@
   linkEl.rel = 'stylesheet';
   document.head.appendChild(linkEl);
 
-  var linkEl = document.createElement('link');
-  linkEl.href = originBase + '/themes/bootstrap-responsive.min.css';
-  linkEl.rel = 'stylesheet';
-  document.head.appendChild(linkEl);
+  // Mathjax script
+  var scriptEl = document.createElement('script');
+  scriptEl.src = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML';
+  scriptEl.type = 'text/javascript';
+  document.head.appendChild(scriptEl);
+  
 
   //////////////////////////////////////////////////////////////////////
   //
@@ -89,16 +100,16 @@
 
   var markdown = markdownEl.textContent || markdownEl.innerText;
 
-  var newNode = document.createElement('div');
-  newNode.className = 'container';
+  var newNode = document.createElement('main');
+  newNode.className = 'container-fluid';
   newNode.id = 'content';
   document.body.replaceChild(newNode, markdownEl);
 
   // Insert navbar if there's none
-  var newNode = document.createElement('div');
-  newNode.className = 'navbar navbar-fixed-top';
+  var newNode = document.createElement('nav');
+  newNode.className = 'navbar navbar-default navbar-fixed-top';
   if (!navbarEl && titleEl) {
-    newNode.innerHTML = '<div class="navbar-inner"> <div class="container"> <div id="headline" class="brand"> </div> </div> </div>';
+    newNode.innerHTML = '<div class="container"> <div class="navbar-header"> <div id="headline" class="navbar-brand"> </div> </div> </div>';
     document.body.insertBefore(newNode, document.body.firstChild);
     var title = titleEl.innerHTML;
     var headlineEl = document.getElementById('headline');
@@ -112,23 +123,29 @@
   //
 
   // Generate Markdown
+  marked.setOptions({
+    highlight : function(code,lang) {
+      try {
+        if(typeof lang == "undefined")
+          return null; //return(hljs.highlightAuto(code).value);
+        else
+          return(hljs.highlight(lang,code,true).value);
+      } catch (e) {
+        return null;
+      }
+    },
+    langPrefix : "",
+    highlightClass : "hljs"
+  });
   var html = marked(markdown);
   document.getElementById('content').innerHTML = html;
 
-  // Prettify
-  var codeEls = document.getElementsByTagName('code');
-  for (var i=0, ii=codeEls.length; i<ii; i++) {
-    var codeEl = codeEls[i];
-    var lang = codeEl.className;
-    codeEl.className = 'prettyprint lang-' + lang;
-  }
-  prettyPrint();
 
   // Style tables
   var tableEls = document.getElementsByTagName('table');
   for (var i=0, ii=tableEls.length; i<ii; i++) {
     var tableEl = tableEls[i];
-    tableEl.className = 'table table-striped table-bordered';
+    tableEl.className = 'table table-bordered';
   }
 
   // All done - show body
