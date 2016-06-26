@@ -108,6 +108,11 @@ body {
 		padding-top: 20px;
 	}
 
+	@media screen and (max-width: @max-xs-screen-width) {
+		margin-top: 50px;  // Add space to not cover the toggle button
+		border-top: 0;  // Hide the border that then appears in the middle of the header.
+	}
+
 }
 
 /* Styles in xs mode  */

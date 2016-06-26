@@ -32,7 +32,7 @@
 
     createNavbar: function (settings) {
       if (!settings.navbar) {return;}
-      var navbarCollapseBtn = ' <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">' +
+      var navbarCollapseBtn = ' <button type="button" class="navbar-toggle" onclick="$(\'.navbar-collapse\').toggle()">' +
                               '   Table of Contents' +
                               ' </button>',
           tocInsertionPoint = '<div class="toc collapse navbar-collapse"></div>',

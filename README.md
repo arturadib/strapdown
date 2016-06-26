@@ -12,7 +12,7 @@ For more, please see:
 
 ## Contributor guide
 
-You will need Node.js (>0.6.x) and Bower to generate the bundles. To bundle/compile the assets, issue in the project directory:
+You will need Node.js (>0.6.x), Bower and Grunt to generate the bundles. To bundle/compile the assets, issue in the project directory:
 
 ```
 $ npm install

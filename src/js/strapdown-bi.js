@@ -22,7 +22,7 @@
 	}
 
 
-	$(window).load(function () {
+	$(window).on('load', function () {
 		$('body').show(); // We're done, we can show it.
 	});
 
